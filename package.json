@@ -1,0 +1,15 @@
+{
+  "name": "zahid-cc",
+  "private": true,
+  "description": "Static personal site for zahid.cc (Cloudflare Pages)",
+  "scripts": {
+    "build": "bash scripts/build-pages.sh",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=zahid-cc --commit-dirty=true",
+    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name=zahid-cc --branch=preview --commit-dirty=true",
+    "pages:login": "wrangler login",
+    "pages:whoami": "wrangler whoami"
+  },
+  "devDependencies": {
+    "wrangler": "^4.112.0"
+  }
+}

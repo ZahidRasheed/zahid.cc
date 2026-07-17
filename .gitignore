@@ -1,0 +1,29 @@
+# OS / editor
+.DS_Store
+*.log
+error_log
+.htacess
+
+# Dependencies / build
+node_modules/
+dist/
+.wrangler/
+
+# Archived / legacy (do not publish to Pages)
+backup/
+podcast/
+blog/
+builds/
+zeeveloper.com/
+!domains/
+Documentation/
+php/
+sass/
+colors/
+Dockerfile
+docker-compose.yml
+p.m3u
+
+# Large leftovers
+*.zip
+*.tar.gz
