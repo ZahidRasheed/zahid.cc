@@ -98,6 +98,7 @@
 var stylesheet = css[Math.round(Math.random()*(css.length-1))];
   document.write(stylesheet);
 </script>
+<link href="stylesheets/quotes.css" rel="stylesheet">
 
 <script type="application/ld+json">
 {
@@ -1124,14 +1125,26 @@ var stylesheet = css[Math.round(Math.random()*(css.length-1))];
 
 
 <!--==========================================
-                      FOOTER
+                      FOOTER / QUOTES
 ===========================================-->
 
-<footer>
+<footer id="quotes" class="section">
     <div class="container">
-        <p class="text-center">
-          "Our lives begin to end the day we become silent about things that matter." — Martin Luther King, Jr.
-        </p>
+        <div id="quotes-card" class="card">
+            <div class="quotes-slider-wrap">
+                <button type="button" class="quotes-nav quotes-prev" aria-label="Previous quote">
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                </button>
+                <div class="swiper-container swiper-container-quotes">
+                    <div class="swiper-wrapper" id="quotes-wrapper">
+                        <!-- Slides injected by js/quotes.js (shuffled on each load) -->
+                    </div>
+                </div>
+                <button type="button" class="quotes-nav quotes-next" aria-label="Next quote">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
     </div>
 </footer>
 
@@ -1148,6 +1161,7 @@ var stylesheet = css[Math.round(Math.random()*(css.length-1))];
 <script src="js/vendors/swiper.jquery.min.js"></script>
 <script src="js/vendors/jquery.magnific-popup.min.js"></script>
 <script src="js/email-reveal.js"></script>
+<script src="js/quotes.js"></script>
 <script src="js/custom.js"></script>
 </body>
 </html>
