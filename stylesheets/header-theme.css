@@ -1,0 +1,52 @@
+/* Theme-aware header background */
+:root {
+  --theme-primary: #06A763;
+}
+
+#home .header-background {
+  position: relative;
+  overflow: hidden;
+  background: url(../images/backgrounds/header-background.jpg) no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+}
+
+#home .header-background::before,
+#home .header-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Preserve texture while shifting hue toward the active theme */
+#home .header-background::before {
+  background-color: var(--theme-primary);
+  mix-blend-mode: color;
+  opacity: 0.72;
+}
+
+/* Deepen with a soft theme wash so it reads with the v-card color */
+#home .header-background::after {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-primary) 55%, transparent) 0%,
+    color-mix(in srgb, var(--theme-primary) 35%, rgba(0, 0, 0, 0.25)) 100%
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+
+@supports not (background: color-mix(in srgb, red 50%, blue)) {
+  #home .header-background::after {
+    background: var(--theme-primary);
+    opacity: 0.45;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #home .header-background {
+    background-attachment: scroll;
+  }
+}

@@ -81,23 +81,26 @@
     <link href="stylesheets/vendors/bootstrap.min.css" rel="stylesheet">
 
 <script>
-  var css = new Array(
-    "<link href='stylesheets/style_green.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_green_blend.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_gray.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_dark_gary.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_blue_blend.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_brown.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_blue.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_pink.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_teal.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_purple.css' id='switch_style' rel='stylesheet'>",
-    "<link href='stylesheets/style_red.css' id='switch_style' rel='stylesheet'>"
-  );
+  var themes = [
+    { href: "stylesheets/style_green.css", color: "#06A763" },
+    { href: "stylesheets/style_green_blend.css", color: "#06A763" },
+    { href: "stylesheets/style_gray.css", color: "#616161" },
+    { href: "stylesheets/style_dark_gary.css", color: "#06A763" },
+    { href: "stylesheets/style_blue_blend.css", color: "#1F5694" },
+    { href: "stylesheets/style_brown.css", color: "#5D4037" },
+    { href: "stylesheets/style_blue.css", color: "#1F5694" },
+    { href: "stylesheets/style_pink.css", color: "#D81B60" },
+    { href: "stylesheets/style_teal.css", color: "#038175" },
+    { href: "stylesheets/style_purple.css", color: "#5F1A89" },
+    { href: "stylesheets/style_red.css", color: "#E73A2E" }
+  ];
 
-var stylesheet = css[Math.round(Math.random()*(css.length-1))];
-  document.write(stylesheet);
+  var theme = themes[Math.floor(Math.random() * themes.length)];
+  document.documentElement.style.setProperty("--theme-primary", theme.color);
+  document.documentElement.style.setProperty("--quotes-accent", theme.color);
+  document.write("<link href='" + theme.href + "' id='switch_style' rel='stylesheet'>");
 </script>
+<link href="stylesheets/header-theme.css" rel="stylesheet">
 <link href="stylesheets/quotes.css" rel="stylesheet">
 
 <script type="application/ld+json">

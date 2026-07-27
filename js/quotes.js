@@ -55,7 +55,10 @@
     }
 
     function applyThemeAccent() {
-        var accent = $("#loading").css("background-color");
+        var accent = getComputedStyle(document.documentElement).getPropertyValue("--theme-primary").trim();
+        if (!accent) {
+            accent = $("#loading").css("background-color");
+        }
         if (!accent || accent === "rgba(0, 0, 0, 0)" || accent === "transparent") {
             accent = $(".btn.waves-effect").first().css("background-color") || "#1976D2";
         }
