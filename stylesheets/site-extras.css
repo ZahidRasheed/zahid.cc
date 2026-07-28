@@ -15,6 +15,11 @@
   font-weight: 700;
 }
 
+#instagram .instagram-hint {
+  margin: -0.35rem auto 1.1rem;
+  max-width: 36rem;
+}
+
 /* Recognition strip */
 #recognition .recognition-card {
   padding: 1.5rem 1.25rem;
