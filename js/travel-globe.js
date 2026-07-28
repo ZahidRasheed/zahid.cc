@@ -1,12 +1,8 @@
 (function () {
     "use strict";
 
-    function themeColor() {
-        var value = getComputedStyle(document.documentElement)
-            .getPropertyValue("--theme-primary")
-            .trim();
-        return value || "#06A763";
-    }
+    // Fixed visited-country color — does not follow the random page theme.
+    var GLOBE_ACCENT = "#48A468";
 
     function visitedMap(list) {
         var map = {};
@@ -96,7 +92,7 @@
         }
 
         var visited = visitedMap(countries);
-        var accent = themeColor();
+        var accent = GLOBE_ACCENT;
         var size = globeSize(mount.clientWidth);
         var pointCountries = countries.filter(function (item) {
             return typeof item.lat === "number" && typeof item.lng === "number";

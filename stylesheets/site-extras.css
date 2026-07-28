@@ -450,7 +450,7 @@
 }
 
 .travel-count strong {
-  color: var(--theme-primary, #1976D2);
+  color: #48A468;
   font-size: 1.15rem;
 }
 
