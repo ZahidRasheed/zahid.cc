@@ -65,7 +65,13 @@
 
     function globeSize(mountWidth) {
         var width = mountWidth || 640;
-        // ~1.5x original size after a 25% reduction from the previous large view.
+        var isMobile = window.matchMedia("(max-width: 767px)").matches;
+        if (isMobile) {
+            // Keep the full globe visible in a phone viewport.
+            var mobileHeight = Math.max(260, Math.min(340, Math.round(width * 0.88)));
+            return { width: width, height: mobileHeight };
+        }
+        // Desktop / tablet: ~1.5x the original canvas size.
         var height = Math.max(480, Math.min(690, Math.round(width * 0.71)));
         return { width: width, height: height };
     }

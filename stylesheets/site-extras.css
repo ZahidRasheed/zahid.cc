@@ -343,16 +343,17 @@
   }
 }
 
-/* Travel globe */
-#travel .section-title img {
-  box-shadow: none;
-  background: transparent;
-  padding: 0;
+/* Section title icons — flat, no card chrome */
+.section .section-title img {
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
   width: 42px;
   margin: 0 10px 6px 0;
   vertical-align: middle;
 }
 
+/* Travel globe */
 #travel .travel-card {
   padding: 1.25rem 1rem 1.5rem;
   overflow: hidden;
@@ -364,7 +365,7 @@
 
 #travel-globe {
   width: 100%;
-  min-height: 480px;
+  min-height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
