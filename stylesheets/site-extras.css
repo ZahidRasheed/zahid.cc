@@ -373,23 +373,36 @@
 }
 
 .education-card {
+  position: relative;
   padding: 1.5rem 1.35rem 1.6rem;
   margin: 0;
   text-align: left;
 }
 
 .education-card__logo {
-  margin-bottom: 1rem;
-  height: 72px;
+  position: absolute;
+  top: 1.35rem;
+  right: 1.25rem;
+  margin: 0;
+  height: 64px;
+  width: 64px;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .education-card__logo img {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
   display: block;
+}
+
+.education-card__degree,
+.education-card__school,
+.education-card__meta,
+.education-card__focus {
+  padding-right: 5rem;
 }
 
 .education-card__degree {
