@@ -488,8 +488,9 @@
 }
 
 .travel-chip-list .travel-visits {
-  color: var(--theme-primary, #1976D2);
-  font-weight: 700;
+  color: inherit;
+  font-weight: inherit;
+  opacity: 0.72;
 }
 
 .travel-tooltip {
