@@ -15,7 +15,8 @@
   font-weight: 700;
 }
 
-#instagram .instagram-hint {
+/* Shared section subheading — always sits under the title, outside the card */
+.section-subhead {
   margin: -0.35rem auto 1.1rem;
   max-width: 36rem;
 }
@@ -145,15 +146,6 @@
   text-align: center;
 }
 
-.contact-card .contact-lead {
-  max-width: 34rem;
-  margin: 0 auto 1.5rem;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: #616161;
-  text-align: center;
-}
-
 .contact-actions {
   display: flex;
   flex-wrap: wrap;
@@ -209,30 +201,6 @@
   display: inline;
   color: var(--theme-primary, #1976D2);
   border-bottom: 1px dotted currentColor;
-}
-
-/* Quote intro */
-#quotes .quotes-intro {
-  margin: 0 0 12px;
-  text-align: center;
-}
-
-#quotes .quotes-intro p {
-  margin: 0;
-  font-family: 'Muli', 'Raleway', sans-serif;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: #9e9e9e;
-  text-align: center;
-}
-
-#quotes .quotes-intro strong {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #757575;
 }
 
 /* Now page */
@@ -442,10 +410,6 @@
 #travel .travel-card {
   padding: 1.25rem 1rem 1.5rem;
   overflow: hidden;
-}
-
-#travel .travel-hint {
-  margin-bottom: 0.5rem;
 }
 
 #travel-globe {
