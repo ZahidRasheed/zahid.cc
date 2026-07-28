@@ -65,8 +65,8 @@
 
     function globeSize(mountWidth) {
         var width = mountWidth || 640;
-        // Roughly 2x the original ~320–460px canvas.
-        var height = Math.max(640, Math.min(920, Math.round(width * 0.95)));
+        // ~1.5x original size after a 25% reduction from the previous large view.
+        var height = Math.max(480, Math.min(690, Math.round(width * 0.71)));
         return { width: width, height: height };
     }
 
