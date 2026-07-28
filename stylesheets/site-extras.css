@@ -344,6 +344,15 @@
 }
 
 /* Travel globe */
+#travel .section-title img {
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+  width: 42px;
+  margin: 0 10px 6px 0;
+  vertical-align: middle;
+}
+
 #travel .travel-card {
   padding: 1.25rem 1rem 1.5rem;
   overflow: hidden;
@@ -355,7 +364,7 @@
 
 #travel-globe {
   width: 100%;
-  min-height: 320px;
+  min-height: 640px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -431,6 +440,6 @@
   }
 
   #travel-globe {
-    min-height: 400px;
+    min-height: 820px;
   }
 }

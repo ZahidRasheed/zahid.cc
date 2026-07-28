@@ -11,7 +11,7 @@
     function visitedMap(list) {
         var map = {};
         for (var i = 0; i < list.length; i++) {
-            map[String(list[i].code).toUpperCase()] = list[i].name || list[i].code;
+            map[String(list[i].code).toUpperCase()] = list[i];
         }
         return map;
     }
@@ -63,6 +63,13 @@
         }
     }
 
+    function globeSize(mountWidth) {
+        var width = mountWidth || 640;
+        // Roughly 2x the original ~320–460px canvas.
+        var height = Math.max(640, Math.min(920, Math.round(width * 0.95)));
+        return { width: width, height: height };
+    }
+
     function initGlobe() {
         var mount = document.getElementById("travel-globe");
         var legend = document.getElementById("travel-legend");
@@ -79,8 +86,10 @@
 
         var visited = visitedMap(countries);
         var accent = themeColor();
-        var width = mount.clientWidth || 640;
-        var height = Math.max(320, Math.min(460, Math.round(width * 0.72)));
+        var size = globeSize(mount.clientWidth);
+        var pointCountries = countries.filter(function (item) {
+            return typeof item.lat === "number" && typeof item.lng === "number";
+        });
 
         fetch("data/countries-110m.geojson")
             .then(function (res) {
@@ -90,9 +99,19 @@
                 return res.json();
             })
             .then(function (geojson) {
+                var presentCodes = {};
+                for (var i = 0; i < geojson.features.length; i++) {
+                    presentCodes[geojson.features[i].properties.ISO_A2] = true;
+                }
+
+                // Marker fallback for tiny countries missing from the polygon set.
+                var points = pointCountries.filter(function (item) {
+                    return !presentCodes[item.code];
+                });
+
                 var world = Globe()
-                    .width(width)
-                    .height(height)
+                    .width(size.width)
+                    .height(size.height)
                     .backgroundColor("rgba(0,0,0,0)")
                     .showGlobe(true)
                     .showAtmosphere(true)
@@ -119,27 +138,36 @@
                             : "rgba(255, 255, 255, 0.12)";
                     })
                     .polygonLabel(function (d) {
-                        var name = d.properties.NAME || d.properties.ISO_A2;
-                        if (visited[d.properties.ISO_A2]) {
+                        var entry = visited[d.properties.ISO_A2];
+                        var name = (entry && entry.name) || d.properties.NAME || d.properties.ISO_A2;
+                        if (entry) {
                             return '<div class="travel-tooltip"><b>' + name + '</b><br>Visited</div>';
                         }
                         return '<div class="travel-tooltip">' + name + '</div>';
                     })
+                    .pointsData(points)
+                    .pointLat("lat")
+                    .pointLng("lng")
+                    .pointAltitude(0.02)
+                    .pointRadius(0.45)
+                    .pointColor(function () { return accent; })
+                    .pointLabel(function (d) {
+                        return '<div class="travel-tooltip"><b>' + d.name + '</b><br>Visited</div>';
+                    })
                     (mount);
 
                 world.controls().autoRotate = true;
-                world.controls().autoRotateSpeed = 0.55;
+                world.controls().autoRotateSpeed = 0.45;
                 world.controls().enableZoom = false;
-                world.pointOfView({ lat: 28, lng: 25, altitude: 2.15 }, 0);
+                world.pointOfView({ lat: 25, lng: 20, altitude: 1.55 }, 0);
 
                 var resizeTimer = null;
                 window.addEventListener("resize", function () {
                     window.clearTimeout(resizeTimer);
                     resizeTimer = window.setTimeout(function () {
-                        var nextWidth = mount.clientWidth || width;
-                        var nextHeight = Math.max(320, Math.min(460, Math.round(nextWidth * 0.72)));
-                        world.width(nextWidth);
-                        world.height(nextHeight);
+                        var next = globeSize(mount.clientWidth);
+                        world.width(next.width);
+                        world.height(next.height);
                     }, 150);
                 });
             })
