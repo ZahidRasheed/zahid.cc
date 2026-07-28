@@ -7,7 +7,7 @@
 window.TRAVEL_COUNTRIES = [
     { code: "AT", name: "Austria" },
     { code: "AU", name: "Australia" },
-    { code: "CZ", name: "Czech Republic" },
+    { code: "CZ", name: "Czech Republic", visits: 2 },
     { code: "DK", name: "Denmark" },
     { code: "EG", name: "Egypt" },
     { code: "FR", name: "France", visits: 2 },
