@@ -17,7 +17,7 @@ window.TRAVEL_COUNTRIES = [
     { code: "IT", name: "Italy", visits: 3 },
     { code: "MY", name: "Malaysia", visits: 3 },
     { code: "NL", name: "Netherlands", visits: 4 },
-    { code: "NO", name: "Norway" },
+    { code: "NO", name: "Norway", visits: 5 },
     { code: "PK", name: "Pakistan" },
     { code: "PL", name: "Poland" },
     { code: "PT", name: "Portugal" },
