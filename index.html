@@ -102,7 +102,7 @@
 </script>
 <link href="stylesheets/header-theme.css?v=20260728" rel="stylesheet">
 <link href="stylesheets/quotes.css?v=20260728b" rel="stylesheet">
-<link href="stylesheets/site-extras.css?v=20260728c" rel="stylesheet">
+<link href="stylesheets/site-extras.css?v=20260728d" rel="stylesheet">
 
 <script type="application/ld+json">
 {
@@ -808,6 +808,22 @@
 </div>
 
 <!--==========================================
+                   TRAVEL
+===========================================-->
+<section id="travel" class="section" aria-labelledby="travel-heading">
+    <div class="container">
+        <div class="section-title">
+            <h4 id="travel-heading" class="text-uppercase text-center"><img src="images/icons/compass.png" alt="" role="presentation">Travel</h4>
+        </div>
+        <div class="card travel-card">
+            <p class="site-note travel-hint">Drag to explore · visited countries glow in the theme color</p>
+            <div id="travel-globe" role="img" aria-label="Interactive globe highlighting countries visited"></div>
+            <div id="travel-legend"></div>
+        </div>
+    </div>
+</section>
+
+<!--==========================================
                    EXPERIENCE
 ===========================================-->
 <section id="experience" class="section" aria-labelledby="experience-heading">
@@ -1210,6 +1226,9 @@
 <script src="js/vendors/jquery.magnific-popup.min.js"></script>
 <script src="js/email-reveal.js"></script>
 <script src="js/quotes.js?v=20260728"></script>
+<script src="https://unpkg.com/globe.gl@2.41.4/dist/globe.gl.min.js"></script>
+<script src="js/travel-countries.js?v=20260728"></script>
+<script src="js/travel-globe.js?v=20260728"></script>
 <script src="js/custom.js"></script>
 </body>
 </html>
