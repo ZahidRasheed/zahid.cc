@@ -102,6 +102,7 @@
 </script>
 <link href="stylesheets/header-theme.css?v=20260728" rel="stylesheet">
 <link href="stylesheets/quotes.css?v=20260728b" rel="stylesheet">
+<link href="stylesheets/site-extras.css?v=20260728c" rel="stylesheet">
 
 <script type="application/ld+json">
 {
@@ -336,9 +337,18 @@
   }
   .about-facts .material-icons {
     font-size: 1.25rem;
-    color: #1976D2;
+    color: var(--theme-primary, #1976D2);
     flex-shrink: 0;
     margin-top: 0.1rem;
+  }
+  .about-facts a.plain-link {
+    color: var(--theme-primary, #1976D2);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .about-facts a.plain-link:hover,
+  .about-facts a.plain-link:focus {
+    border-bottom-color: currentColor;
   }
   .about-facts__badge {
     display: inline-block;
@@ -729,6 +739,10 @@
                                             <i class="material-icons" aria-hidden="true">camera_alt</i>
                                             <span>Photography, travel, and getting a little better every day</span>
                                         </li>
+                                        <li>
+                                            <i class="material-icons" aria-hidden="true">schedule</i>
+                                            <span><a class="plain-link" href="/now/">What I’m focused on now →</a></span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -739,6 +753,36 @@
         </div>
     </div>
 </div>
+
+<!--==========================================
+                   RECOGNITION
+===========================================-->
+<section id="recognition" class="section" aria-labelledby="recognition-heading">
+    <div class="container">
+        <div class="section-title">
+            <h4 id="recognition-heading" class="text-uppercase text-center"><img src="images/icons/star.png" alt="" role="presentation">Recognition</h4>
+        </div>
+        <div class="card recognition-card">
+            <ul class="recognition-grid">
+                <li class="recognition-item">
+                    <i class="material-icons" aria-hidden="true">emoji_events</i>
+                    <h3>Berlingske Talent 100</h3>
+                    <p>Named among Denmark’s Talent 100 in 2024 for engineering leadership and impact.</p>
+                </li>
+                <li class="recognition-item">
+                    <i class="material-icons" aria-hidden="true">school</i>
+                    <h3>IEEE Research</h3>
+                    <p><a href="https://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6413397" target="_blank" rel="noopener noreferrer">Published research</a> on airway modeling in 4D lung CT images.</p>
+                </li>
+                <li class="recognition-item">
+                    <i class="material-icons" aria-hidden="true">menu_book</i>
+                    <h3>Writing &amp; teaching</h3>
+                    <p>Leadership and Android engineering pieces for Kodeco, including inclusive leadership.</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
 
 <!--==========================================
                    Instagram
@@ -882,75 +926,49 @@
 
 
 <!--==========================================
-                   SKILLS
+                   CAPABILITIES
 ===========================================-->
-
-<!--
-<section id="skills" class="section">
+<section id="capabilities" class="section" aria-labelledby="capabilities-heading">
     <div class="container">
         <div class="section-title">
-            <h4 class="text-uppercase text-center"><img src="images/icons/mixer.png" alt="demo">Skills</h4>
+            <h4 id="capabilities-heading" class="text-uppercase text-center"><img src="images/icons/mixer.png" alt="" role="presentation">Capabilities</h4>
         </div>
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div id="skills-card" class="card">
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="skills-title">
-                                    <h6 class="text-center">Professional</h6>
-                                </div>
-                                <div class="skillbar" data-percent="90%">
-                                    <div class="skillbar-title"><span>Java</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-                                <div class="skillbar" data-percent="95%">
-                                    <div class="skillbar-title"><span>Kotlin</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-                                <div class="skillbar" data-percent="96%">
-                                    <div class="skillbar-title"><span>#Agile</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-
-                                <div class="skillbar" data-percent="75%">
-                                    <div class="skillbar-title"><span>PHP, Amazon Web Services</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="skills-title">
-                                    <h6 class="text-center">Software</h6>
-                                </div>
-                                <div class="skillbar" data-percent="98%">
-                                    <div class="skillbar-title"><span>Android Studio</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-                                <div class="skillbar" data-percent="99%">
-                                    <div class="skillbar-title"><span>GIT</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-                                <div class="skillbar" data-percent="80%">
-                                    <div class="skillbar-title"><span>Atlassian Products</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-                                <div class="skillbar" data-percent="70%">
-                                    <div class="skillbar-title"><span>ITK & VTK</span></div>
-                                    <div class="skillbar-bar"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="card capabilities-card">
+            <div class="capabilities-grid">
+                <div class="capability-group">
+                    <h3>AI &amp; platforms</h3>
+                    <ul>
+                        <li>Sovereign AI &amp; trusted infrastructure</li>
+                        <li>AI enablement &amp; Centers of Excellence</li>
+                        <li>Agentic systems &amp; platform modernization</li>
+                        <li>Cloud architecture &amp; delivery at scale</li>
+                    </ul>
+                </div>
+                <div class="capability-group">
+                    <h3>Leadership</h3>
+                    <ul>
+                        <li>Engineering leadership &amp; org design</li>
+                        <li>Business &amp; technical transformation</li>
+                        <li>Inclusive leadership &amp; cognitive diversity</li>
+                        <li>Coaching leaders who still think like builders</li>
+                    </ul>
+                </div>
+                <div class="capability-group">
+                    <h3>Building</h3>
+                    <ul>
+                        <li>Product engineering for consumer scale</li>
+                        <li>Mobile (Android / Kotlin) foundations</li>
+                        <li>Quality, design collaboration, Agile delivery</li>
+                        <li>Writing that teaches practitioners</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </section>
--->
 
 <!--==========================================
-             BLOG
+             PUBLICATIONS
 ===========================================-->
 <section id="blog" class="section" aria-labelledby="publications-heading">
     <div class="container">
@@ -1128,11 +1146,38 @@
 
 
 <!--==========================================
+                      CONTACT
+===========================================-->
+<section id="contact" class="section" aria-labelledby="contact-heading">
+    <div class="container">
+        <div class="section-title">
+            <h4 id="contact-heading" class="text-uppercase text-center"><img src="images/icons/envelope.png" alt="" role="presentation">Contact</h4>
+        </div>
+        <div class="card contact-card">
+            <p class="contact-lead">For speaking, advisory, or conversations about sovereign AI and engineering leadership — I’d love to hear from you.</p>
+            <div class="contact-actions">
+                <a class="btn waves-effect" href="https://www.linkedin.com/in/zahidrasheed" target="_blank" rel="noopener noreferrer">Message on LinkedIn</a>
+                <a class="btn btn-secondary waves-effect" href="/now/">See what I’m doing now</a>
+            </div>
+            <p class="contact-meta">
+                Prefer email?
+                <button type="button" class="email-reveal" data-email-reveal="enJAemFoaWQuY2M=" aria-label="Email address. Press and hold to reveal.">
+                    <span class="email-reveal__mask">Press &amp; hold to reveal</span>
+                </button>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!--==========================================
                       FOOTER / QUOTES
 ===========================================-->
 
 <footer id="quotes" class="section">
     <div class="container">
+        <div class="quotes-intro">
+            <p><strong>Things I keep coming back to</strong>A small rotating shelf of lines that stay useful — leadership, life, and a little nonsense.</p>
+        </div>
         <div id="quotes-card" class="card">
             <div class="quotes-slider-wrap">
                 <button type="button" class="quotes-nav quotes-prev" aria-label="Previous quote">
