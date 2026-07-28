@@ -30,10 +30,13 @@ footer#quotes {
   flex: 0 0 auto;
   width: 44px;
   height: 44px;
-  border: 0;
-  background: transparent;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
   color: var(--quotes-accent);
-  box-shadow: none;
+  box-shadow: none !important;
   cursor: pointer;
   transition: color 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
   display: inline-flex;
@@ -41,6 +44,8 @@ footer#quotes {
   justify-content: center;
   padding: 0;
   z-index: 2;
+  -webkit-appearance: none;
+  appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
 
