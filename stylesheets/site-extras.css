@@ -373,13 +373,18 @@
   text-align: left;
 }
 
-.education-card__icon {
-  margin-bottom: 0.85rem;
+.education-card__logo {
+  margin-bottom: 1rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
 }
 
-.education-card__icon .material-icons {
-  font-size: 1.75rem;
-  color: var(--theme-primary, #1976D2);
+.education-card__logo img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: block;
 }
 
 .education-card__degree {
