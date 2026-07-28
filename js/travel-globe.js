@@ -24,7 +24,12 @@
             return String(a.name).localeCompare(String(b.name));
         });
         var chips = sorted.map(function (item) {
-            return '<li>' + escapeHtml(item.name) + '</li>';
+            var visits = Number(item.visits) || 1;
+            var label = escapeHtml(item.name);
+            if (visits > 1) {
+                label += ' <span class="travel-visits">(' + visits + ')</span>';
+            }
+            return '<li>' + label + '</li>';
         }).join("");
         el.innerHTML =
             '<p class="travel-count"><strong>' + sorted.length + '</strong> countries visited</p>' +

@@ -425,6 +425,11 @@
   border: 1px solid #eeeeee;
 }
 
+.travel-chip-list .travel-visits {
+  color: var(--theme-primary, #1976D2);
+  font-weight: 700;
+}
+
 .travel-tooltip {
   font-family: 'Muli', 'Raleway', sans-serif;
   font-size: 12px;
