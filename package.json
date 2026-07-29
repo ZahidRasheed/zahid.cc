@@ -7,7 +7,8 @@
     "deploy": "npm run build && wrangler pages deploy dist --project-name=zahid-cc --commit-dirty=true",
     "deploy:preview": "npm run build && wrangler pages deploy dist --project-name=zahid-cc --branch=preview --commit-dirty=true",
     "pages:login": "wrangler login",
-    "pages:whoami": "wrangler whoami"
+    "pages:whoami": "wrangler whoami",
+    "purge-cache": "bash scripts/purge-cache.sh"
   },
   "devDependencies": {
     "wrangler": "^4.112.0"
