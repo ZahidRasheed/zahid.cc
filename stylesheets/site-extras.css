@@ -1,4 +1,4 @@
-/* Site extras — recognition, capabilities, contact, quote note, now page */
+/* Site extras — capabilities, contact, quotes, travel, now page */
 
 .site-note {
   margin: 0 0 14px;
@@ -19,67 +19,6 @@
 .section-subhead {
   margin: -0.35rem auto 1.1rem;
   max-width: 36rem;
-}
-
-/* Recognition strip */
-#recognition .recognition-card {
-  padding: 1.5rem 1.25rem;
-}
-
-.recognition-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-@media (min-width: 768px) {
-  .recognition-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-.recognition-item {
-  text-align: center;
-  padding: 0.5rem 0.75rem;
-}
-
-.recognition-item .material-icons {
-  display: block;
-  margin: 0 auto 0.65rem;
-  font-size: 1.75rem;
-  color: var(--theme-primary, #1976D2);
-}
-
-.recognition-item h3 {
-  margin: 0 0 0.35rem;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #424242;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.recognition-item p {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: #757575;
-  text-align: center;
-}
-
-.recognition-item a {
-  color: var(--theme-primary, #1976D2);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-
-.recognition-item a:hover,
-.recognition-item a:focus {
-  border-bottom-color: currentColor;
 }
 
 /* Capabilities (replaces skill bars) */
