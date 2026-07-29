@@ -235,6 +235,9 @@
   margin-top: 1.75rem;
   padding-top: 0;
   border-top: 0;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .now-page .now-nav__home {
