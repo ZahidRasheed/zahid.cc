@@ -36,7 +36,7 @@
   document.documentElement.style.setProperty("--theme-primary", theme.color);
   document.write("<link href='" + theme.href + "' id='switch_style' rel='stylesheet'>");
 </script>
-<link href="../stylesheets/site-extras.css?v=20260728c" rel="stylesheet">
+<link href="../stylesheets/site-extras.css?v=20260729b" rel="stylesheet">
 </head>
 <body class="now-page">
     <header class="now-top">
@@ -74,9 +74,14 @@
                 <p>Conversations on sovereign AI, engineering leadership, and speaking or writing that helps others lead technical change with clarity.</p>
 
                 <nav class="now-nav" aria-label="Now page links">
-                    <a href="/">← Back home</a>
-                    <a href="/#contact">Contact</a>
-                    <a href="https://www.linkedin.com/in/zahidrasheed" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    <a class="now-nav__home" href="/">
+                        <i class="material-icons" aria-hidden="true">arrow_back</i>
+                        <span>Back home</span>
+                    </a>
+                    <div class="now-nav__actions">
+                        <a class="btn btn-secondary waves-effect" href="/#contact">Contact</a>
+                        <a class="btn waves-effect" href="https://www.linkedin.com/in/zahidrasheed" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    </div>
                 </nav>
             </article>
         </div>
