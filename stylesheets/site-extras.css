@@ -165,7 +165,9 @@
   font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0.95;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
 }
 
 .now-page .now-top h1 {
@@ -183,20 +185,25 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: #fff;
+  color: #fff !important;
   text-decoration: none;
   margin: 0 0 0.6rem;
+  opacity: 0.98;
 }
 
 .now-page .now-top__back .material-icons {
   font-size: 1.3rem;
   line-height: 1;
+  color: #fff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .now-page .now-updated {
   margin: 0;
   font-size: 0.9rem;
-  opacity: 0.9;
+  color: rgba(255, 255, 255, 0.94);
+  opacity: 1;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
 }
 
 .now-page .now-body {
