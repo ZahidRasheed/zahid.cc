@@ -826,9 +826,11 @@
         <div class="card travel-card">
             <div id="travel-globe" role="img" aria-label="Interactive globe highlighting countries visited"></div>
             <div class="travel-zoom-controls" aria-label="Travel globe zoom controls">
-                <button type="button" class="travel-zoom-btn" data-zoom-action="in" aria-label="Zoom in">+</button>
-                <button type="button" class="travel-zoom-btn" data-zoom-action="out" aria-label="Zoom out">−</button>
-                <button type="button" class="travel-zoom-btn travel-zoom-btn-reset" data-zoom-action="reset" aria-label="Reset globe zoom">Reset</button>
+                <div class="travel-zoom-scroller" aria-label="Zoom controls">
+                    <button type="button" class="travel-zoom-btn" data-zoom-action="in" aria-label="Zoom in">+</button>
+                    <button type="button" class="travel-zoom-btn" data-zoom-action="out" aria-label="Zoom out">−</button>
+                    <button type="button" class="travel-zoom-btn travel-zoom-btn-reset" data-zoom-action="reset" aria-label="Reset globe zoom">Reset</button>
+                </div>
             </div>
             <div id="travel-legend"></div>
         </div>

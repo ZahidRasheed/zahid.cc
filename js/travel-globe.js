@@ -77,6 +77,13 @@
         return { width: width, height: height };
     }
 
+    function entryVisits(entry) {
+        if (!entry) {
+            return 1;
+        }
+        return Number(entry.visits) || 1;
+    }
+
     function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
     }
@@ -132,28 +139,44 @@
                     .globeImageUrl("https://unpkg.com/three-globe/example/img/earth-night.jpg")
                     .polygonsData(geojson.features)
                     .polygonAltitude(function (d) {
-                        return visited[d.properties.ISO_A2] ? 0.07 : 0.01;
+                        var entry = visited[d.properties.ISO_A2];
+                        if (!entry) {
+                            return 0.01;
+                        }
+                        return entryVisits(entry) > 1 ? 0.09 : 0.05;
                     })
                     .polygonCapColor(function (d) {
-                        return visited[d.properties.ISO_A2]
-                            ? accent
-                            : "rgba(180, 180, 180, 0.22)";
+                        var entry = visited[d.properties.ISO_A2];
+                        if (!entry) {
+                            return "rgba(180, 180, 180, 0.22)";
+                        }
+                        return entryVisits(entry) > 1 ? accent : hexToRgba(accent, 0.85);
                     })
                     .polygonSideColor(function (d) {
-                        return visited[d.properties.ISO_A2]
+                        var entry = visited[d.properties.ISO_A2];
+                        if (!entry) {
+                            return "rgba(120, 120, 120, 0.15)";
+                        }
+                        return entryVisits(entry) > 1
                             ? hexToRgba(accent, 0.45)
-                            : "rgba(120, 120, 120, 0.15)";
+                            : hexToRgba(accent, 0.32);
                     })
                     .polygonStrokeColor(function (d) {
-                        return visited[d.properties.ISO_A2]
+                        var entry = visited[d.properties.ISO_A2];
+                        if (!entry) {
+                            return "rgba(255, 255, 255, 0.12)";
+                        }
+                        return entryVisits(entry) > 1
                             ? hexToRgba(accent, 0.95)
-                            : "rgba(255, 255, 255, 0.12)";
+                            : hexToRgba(accent, 0.75);
                     })
                     .polygonLabel(function (d) {
                         var entry = visited[d.properties.ISO_A2];
                         var name = (entry && entry.name) || d.properties.NAME || d.properties.ISO_A2;
                         if (entry) {
-                            return '<div class="travel-tooltip"><b>' + name + '</b><br>Visited</div>';
+                            var visits = entryVisits(entry);
+                            var visitText = visits > 1 ? 'Visited (' + visits + ')' : 'Visited';
+                            return '<div class="travel-tooltip"><b>' + name + '</b><br>' + visitText + '</div>';
                         }
                         return '<div class="travel-tooltip">' + name + '</div>';
                     })
@@ -164,7 +187,9 @@
                     .pointRadius(0.45)
                     .pointColor(function () { return accent; })
                     .pointLabel(function (d) {
-                        return '<div class="travel-tooltip"><b>' + d.name + '</b><br>Visited</div>';
+                        var visits = entryVisits(d);
+                        var visitText = visits > 1 ? 'Visited (' + visits + ')' : 'Visited';
+                        return '<div class="travel-tooltip"><b>' + d.name + '</b><br>' + visitText + '</div>';
                     })
                     (mount);
 

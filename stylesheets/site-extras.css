@@ -459,6 +459,20 @@
   margin: 0.35rem 0 0.15rem;
 }
 
+.travel-zoom-scroller {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0.25rem;
+  scrollbar-width: none;
+}
+
+.travel-zoom-scroller::-webkit-scrollbar {
+  display: none;
+}
+
 .travel-zoom-btn {
   border: 1px solid #e0e0e0;
   background: #fafafa;
