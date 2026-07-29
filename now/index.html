@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="../stylesheets/vendors/font-awesome.min.css" rel="stylesheet">
     <link href="../stylesheets/vendors/bootstrap.min.css" rel="stylesheet">
     <link href="../stylesheets/vendors/materialize.css" rel="stylesheet">
 
@@ -36,54 +37,81 @@
   document.documentElement.style.setProperty("--theme-primary", theme.color);
   document.write("<link href='" + theme.href + "' id='switch_style' rel='stylesheet'>");
 </script>
-<link href="../stylesheets/site-extras.css?v=20260729b" rel="stylesheet">
+<link href="../stylesheets/site-extras.css?v=20260729c" rel="stylesheet">
 </head>
 <body class="now-page">
     <header class="now-top">
         <div class="container">
-            <p class="now-kicker">zahid.cc/now</p>
+            <p class="now-kicker">zahid.cc / now</p>
             <h1>What I’m focused on now</h1>
-            <p class="now-updated">Updated July 2026 · Copenhagen</p>
+            <p class="now-lead">A living snapshot — not a CV. What’s taking my attention this season.</p>
+            <p class="now-updated"><span class="now-updated__dot" aria-hidden="true"></span> Updated July 2026 · Copenhagen</p>
         </div>
     </header>
 
     <main class="now-body">
         <div class="container">
-            <article class="now-card">
-                <h2>Work</h2>
-                <ul>
-                    <li>Building AI capability at <strong>Aeven</strong> as Head of AI — helping clients adopt AI on sovereign infrastructure.</li>
-                    <li>Deepening practice around agentic systems, trusted data boundaries, and platform foundations that make AI usable in the real world.</li>
-                    <li>Staying close to engineering reality: strategy only counts if teams can ship it.</li>
-                </ul>
-
-                <h2>Thinking about</h2>
-                <ul>
-                    <li>How enterprises keep models, data, and inference inside trusted boundaries without killing speed.</li>
-                    <li>What good engineering leadership looks like when AI changes how teams design, review, and deliver software.</li>
-                    <li>Inclusive leadership and cognitive diversity — still one of the highest-leverage things a leader can invest in.</li>
-                </ul>
-
-                <h2>Outside work</h2>
-                <ul>
-                    <li>Photography and travel when I can steal the time.</li>
-                    <li>Reading and collecting lines that keep me honest (you’ll find some on the homepage).</li>
-                </ul>
-
-                <h2>Open to</h2>
-                <p>Conversations on sovereign AI, engineering leadership, and speaking or writing that helps others lead technical change with clarity.</p>
-
-                <nav class="now-nav" aria-label="Now page links">
-                    <a class="now-nav__home" href="/">
-                        <i class="material-icons" aria-hidden="true">arrow_back</i>
-                        <span>Back home</span>
-                    </a>
-                    <div class="now-nav__actions">
-                        <a class="btn btn-secondary waves-effect" href="/#contact">Contact</a>
-                        <a class="btn waves-effect" href="https://www.linkedin.com/in/zahidrasheed" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <div class="now-grid">
+                <article class="card now-block">
+                    <div class="now-block__head">
+                        <img src="../images/icons/layers.png" alt="" role="presentation">
+                        <h2>Work</h2>
                     </div>
-                </nav>
-            </article>
+                    <ul>
+                        <li>Building AI capability at <strong>Aeven</strong> as Head of AI — sovereign infrastructure, not slideware.</li>
+                        <li>Agentic systems, trusted data boundaries, and platforms teams can actually ship on.</li>
+                        <li>Staying close to engineering reality. Strategy only counts if it leaves the whiteboard.</li>
+                    </ul>
+                </article>
+
+                <article class="card now-block">
+                    <div class="now-block__head">
+                        <img src="../images/icons/light-bulb.png" alt="" role="presentation">
+                        <h2>Thinking about</h2>
+                    </div>
+                    <ul>
+                        <li>How enterprises keep models and inference inside trusted boundaries without killing speed.</li>
+                        <li>What leadership looks like when AI changes how teams design, review, and deliver.</li>
+                        <li>Inclusive leadership and cognitive diversity — still one of the highest-leverage bets.</li>
+                    </ul>
+                </article>
+
+                <article class="card now-block">
+                    <div class="now-block__head">
+                        <img src="../images/icons/device-camera.png" alt="" role="presentation">
+                        <h2>Outside work</h2>
+                    </div>
+                    <ul>
+                        <li>Photography and travel when I can steal the time.</li>
+                        <li>Reading — and collecting lines that keep me honest.</li>
+                    </ul>
+                    <p class="now-block__links">
+                        <a href="/#instagram">Photos</a>
+                        <a href="/#travel">Globe</a>
+                        <a href="/#quotes">Quotes</a>
+                    </p>
+                </article>
+
+                <article class="card now-block now-block--invite">
+                    <div class="now-block__head">
+                        <img src="../images/icons/bubble.png" alt="" role="presentation">
+                        <h2>Open to</h2>
+                    </div>
+                    <p>Conversations on sovereign AI, engineering leadership, and speaking or writing that helps others lead technical change with clarity.</p>
+                    <a class="btn waves-effect now-block__cta" href="/#contact">Start a conversation</a>
+                </article>
+            </div>
+
+            <nav class="now-nav card" aria-label="Now page links">
+                <a class="now-nav__home" href="/">
+                    <i class="material-icons" aria-hidden="true">arrow_back</i>
+                    <span>Back home</span>
+                </a>
+                <div class="now-nav__actions">
+                    <a class="btn btn-secondary waves-effect" href="/#contact">Contact</a>
+                    <a class="btn waves-effect" href="https://www.linkedin.com/in/zahidrasheed" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+            </nav>
         </div>
     </main>
 </body>
