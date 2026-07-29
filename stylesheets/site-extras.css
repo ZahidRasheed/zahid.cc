@@ -179,6 +179,20 @@
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
 }
 
+.now-page .now-top__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #fff;
+  text-decoration: none;
+  margin: 0 0 0.6rem;
+}
+
+.now-page .now-top__back .material-icons {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
 .now-page .now-updated {
   margin: 0;
   font-size: 0.9rem;
