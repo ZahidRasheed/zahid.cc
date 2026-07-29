@@ -431,6 +431,42 @@
   max-width: 100%;
 }
 
+.travel-zoom-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.35rem 0 0.15rem;
+}
+
+.travel-zoom-btn {
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  color: #424242;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  padding: 0 0.6rem;
+  line-height: 2rem;
+  font-size: 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.travel-zoom-btn:hover,
+.travel-zoom-btn:focus {
+  outline: none;
+  border-color: #48A468;
+  color: #48A468;
+  background: #fff;
+}
+
+.travel-zoom-btn-reset {
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 .travel-fallback {
   margin: 2rem 1rem;
   text-align: center;

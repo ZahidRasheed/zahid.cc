@@ -77,9 +77,14 @@
         return { width: width, height: height };
     }
 
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     function initGlobe() {
         var mount = document.getElementById("travel-globe");
         var legend = document.getElementById("travel-legend");
+        var zoomControls = document.querySelectorAll("[data-zoom-action]");
         var countries = window.TRAVEL_COUNTRIES || [];
         renderLegend(legend, countries);
 
@@ -165,8 +170,47 @@
 
                 world.controls().autoRotate = true;
                 world.controls().autoRotateSpeed = 0.45;
-                world.controls().enableZoom = false;
+                world.controls().enableZoom = true;
+                world.controls().minDistance = 120;
+                world.controls().maxDistance = 420;
+                world.controls().zoomSpeed = 0.8;
+                world.controls().enablePan = false;
                 world.pointOfView({ lat: 25, lng: 20, altitude: 1.55 }, 0);
+
+                var defaultView = { lat: 25, lng: 20, altitude: 1.55 };
+                var minAltitude = 0.9;
+                var maxAltitude = 2.45;
+                var zoomStep = 0.2;
+
+                function applyZoom(action) {
+                    var view = world.pointOfView();
+                    var next = {
+                        lat: view.lat,
+                        lng: view.lng,
+                        altitude: view.altitude
+                    };
+
+                    if (action === "in") {
+                        next.altitude = clamp(next.altitude - zoomStep, minAltitude, maxAltitude);
+                    } else if (action === "out") {
+                        next.altitude = clamp(next.altitude + zoomStep, minAltitude, maxAltitude);
+                    } else if (action === "reset") {
+                        next = {
+                            lat: defaultView.lat,
+                            lng: defaultView.lng,
+                            altitude: defaultView.altitude
+                        };
+                    }
+
+                    world.pointOfView(next, 380);
+                }
+
+                for (var z = 0; z < zoomControls.length; z++) {
+                    zoomControls[z].addEventListener("click", function (event) {
+                        var action = event.currentTarget.getAttribute("data-zoom-action");
+                        applyZoom(action);
+                    });
+                }
 
                 var resizeTimer = null;
                 window.addEventListener("resize", function () {
