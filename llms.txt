@@ -1,6 +1,6 @@
 # Zahid Rasheed
 
-> Head of AI at Aeven (Copenhagen). Software engineering leader focused on sovereign AI, platform modernization, and engineering leadership. Berlingske Talent 100 (2024). MSc Artificial Intelligence, University of Leeds.
+> Head of AI at Aeven (Copenhagen). Software engineering leader focused on sovereign AI, platform modernization, and technology leadership. Berlingske Talent 100 (2024). MSc Artificial Intelligence, University of Leeds.
 
 ## Summary
 
@@ -11,7 +11,7 @@ Zahid Rasheed helps organizations build and adopt AI on sovereign infrastructure
 - **Title:** Head of AI / Associate Vice President
 - **Company:** Aeven A/S
 - **Location:** Copenhagen, Denmark
-- **Focus:** AI enablement, sovereign infrastructure, platform modernization, engineering leadership, agentic AI
+- **Focus:** AI enablement, sovereign infrastructure, platform modernization, technology leadership, agentic AI
 
 ## Background
 
