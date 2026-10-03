@@ -1,17 +1,17 @@
 # Zahid Rasheed
 
-> Head of AI at Aeven (Copenhagen). Software engineering leader focused on sovereign AI, platform modernization, and technology leadership. Berlingske Talent 100 (2024). MSc Artificial Intelligence, University of Leeds.
+> Head of AI @ Aeven | AVP | Sovereign AI, AI strategy to business outcomes | Ex-Head of Development, TDC Brands | Berlingske Talent 100
 
 ## Summary
 
-Zahid Rasheed helps organizations build and adopt AI on sovereign infrastructure — systems where data, models, and inference stay within trusted boundaries. He is Associate Vice President at Aeven A/S and was previously Head of Development at TDC Brands (YouSee/Nuuday), leading large engineering teams through business, organizational, and technical transformation at national scale.
+Zahid Rasheed leads AI at Aeven A/S on sovereign European infrastructure — systems where data, models, and inference stay inside trusted boundaries. As Head of the AI Centre of Excellence and Associate Vice President, he owns AI policy and EU AI Act compliance, AI strategy and roadmap, governed LLM use, and measuring business impact. Previously Head of Development at TDC Brands. Originally from Pakistan, he lives in Denmark.
 
 ## Current role
 
 - **Title:** Head of AI / Associate Vice President
 - **Company:** Aeven A/S
 - **Location:** Copenhagen, Denmark
-- **Focus:** AI enablement, sovereign infrastructure, platform modernization, technology leadership, agentic AI
+- **Focus:** Sovereign AI, AI strategy, business outcomes, EU AI Act compliance, governed LLM use
 
 ## Background
 
@@ -21,7 +21,8 @@ Zahid Rasheed helps organizations build and adopt AI on sovereign infrastructure
 - M.Sc. Artificial Intelligence, University of Leeds (2010–2012)
 - BSc Computer Science, CIIT Islamabad (2006–2010)
 - Berlingske Talent 100, 2024
-- Based in Denmark
+- Originally from Pakistan; based in Denmark
+- Interests: photography, travel, continuous personal growth
 
 ## Publications
 
@@ -40,5 +41,4 @@ Zahid Rasheed helps organizations build and adopt AI on sovereign infrastructure
 
 ## Contact
 
-Prefer LinkedIn: https://www.linkedin.com/in/zahidrasheed
-Email is also available on https://zahid.cc (press and hold to reveal on the website).
+Prefer LinkedIn or the contact section on https://zahid.cc/#contact
