@@ -1,0 +1,24 @@
+# Archived offline — stored in /var/www/archive (server) or ../zahid.cc-archive (local)
+blog/
+builds/
+zeeveloper.com/
+!domains/zeeveloper.com/
+
+# Dev / git tooling — never deploy to production
+.git/
+.github/
+scripts/
+Dockerfile
+docker-compose.yml
+
+backup/
+podcast/
+.DS_Store
+*.log
+error_log
+
+# Huge archives under !domains
+!domains/archive-name.tar.gz
+!domains/*.zip
+!domains/technifi-delete*
+!domains/technifi-delete-again/
