@@ -12,6 +12,7 @@ rsync -a \
   --exclude '.git/' \
   --exclude '.github/' \
   --exclude 'dist/' \
+  --exclude 'functions/' \
   --exclude 'node_modules/' \
   --exclude '!domains/' \
   --exclude 'Documentation/' \

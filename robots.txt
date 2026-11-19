@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
 # AI crawlers — welcome; see /llms.txt for a structured summary
 User-agent: GPTBot

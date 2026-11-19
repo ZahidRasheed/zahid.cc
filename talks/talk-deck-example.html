@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>talk-deck starter</title>
+<style>
+/* Talk deck engine. One self-contained file, no build step, opens from file://.
+   Themes: <body data-theme="clean|keynote">. Theme tokens live in the THEMES block below; add a theme by adding a block.
+   Fixed 16:9 canvas (1280 x 720) scaled to the window. Everything inside a slide is sized in em,
+   so one --fit value shrinks a dense slide (or grows a sparse one) until it fits. Neutral palette, no logo. */
+:root{
+  --ink:#1C2430; --dim:#4A5565; --faint:#7C8796; --line:#D7DDE5; --panel:#F3F5F8;
+  --deep:#1F2A3A; --brand:#5B6676; --accent:#2F5FAD;
+  --ok:#2F7D4F; --warn:#A8741A; --bad:#A63D2F; --info:#2F6690;
+  --gapbg:#FFF6DC; --gapline:#B98300; --gapink:#6E4B00;
+  --sans:"Segoe UI","Helvetica Neue",Arial,sans-serif; --mono:Consolas,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
+.stage{touch-action:pan-y pinch-zoom}
+body{background:#12161C;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+a{color:var(--accent)}
+.stage{position:fixed;left:50%;top:50%;width:1280px;height:720px;background:#fff;overflow:hidden;transform-origin:center center;transform:translate(-50%,-50%) scale(var(--s,1));box-shadow:0 14px 48px rgba(0,0,0,.4)}
+.slide{position:absolute;inset:0;visibility:hidden;display:flex;flex-direction:column;padding:2.5em 3.6em 3.5em;font-size:calc(15px * var(--fit,1));line-height:1.45;overflow:hidden;background:#fff}
+.slide.active{visibility:visible}
+.slide.out{display:none}
+
+/* type */
+.eyebrow{margin:0 0 .35em;font-size:.74em;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{margin:0;font-weight:600;letter-spacing:-.02em}
+h2{margin:0 0 .5em;font-size:1.8em;line-height:1.18;font-weight:600;color:var(--deep);letter-spacing:-.012em;max-width:31em}
+h2::after{content:"";display:block;width:2.6em;height:3px;background:var(--accent);margin-top:.5em}
+h3{margin:0 0 .3em;font-size:1.02em;font-weight:650;color:var(--deep)}
+.sub{margin:0 0 .6em;font-size:.95em;color:var(--dim);max-width:60em}
+.lede{font-size:1.1em;color:var(--dim);max-width:40em;margin:0}
+.mono{font-family:var(--mono);font-size:.88em;background:var(--panel);padding:.05em .35em;border-radius:2px}
+strong{color:var(--ink);font-weight:650}
+ul.big{margin:.5em 0 0;padding-left:1.2em;color:var(--dim);line-height:1.5} ul.big li{margin-bottom:.6em}
+
+/* grids, cards, notes, tables, kpi */
+.grid{display:grid;gap:.9em;margin-top:.85em;align-items:stretch}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--panel);border-top:3px solid var(--deep);padding:.75em 1em .85em;display:flex;flex-direction:column}
+.card p{margin:0;font-size:.92em;color:var(--dim);line-height:1.45} .card p+p{margin-top:.5em}
+.card.ok{border-top-color:var(--ok)} .card.warn{border-top-color:var(--warn)} .card.bad{border-top-color:var(--bad)} .card.accent{border-top-color:var(--accent)}
+.kpi{margin:0 0 .1em;font-size:1.9em;font-weight:600;color:var(--deep);line-height:1.08;font-variant-numeric:tabular-nums}
+.kpi-label{margin:0;font-size:.82em;color:var(--dim);line-height:1.35}
+.note{margin-top:.85em;padding:.6em .95em;background:var(--panel);border-left:4px solid var(--accent);font-size:.9em;color:var(--dim)}
+.note.risk{border-left-color:var(--bad)} .note.good{border-left-color:var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:.86em;margin-top:.6em}
+th{text-align:left;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:.4em .7em;border-bottom:2px solid var(--deep)}
+td{padding:.42em .7em;border-bottom:1px solid var(--line);vertical-align:top;color:var(--dim)} td:first-child{color:var(--ink);font-weight:600} tr:last-child td{border-bottom:none}
+.flow{display:flex;gap:.7em;margin-top:.85em;align-items:stretch}
+.flow .step{flex:1 1 0;background:var(--panel);border-top:3px solid var(--accent);padding:.65em .85em .75em}
+.flow .step .n{font-size:.66em;font-weight:700;letter-spacing:.09em;color:var(--accent);margin-bottom:.3em}
+.flow .step h4{margin:0 0 .22em;font-size:.97em;color:var(--deep)} .flow .step p{margin:0;font-size:.85em;color:var(--dim)}
+.src{margin:auto 0 0;padding-top:.6em;font-size:.7em;color:var(--faint);line-height:1.4}
+.slide > .src:not(:first-child){border-top:1px solid var(--line)}
+
+/* status markers: a dot or ring plus text, never pastel pills */
+.pill{display:inline-flex;align-items:center;gap:.4em;font-size:.76em;font-weight:650;white-space:nowrap;vertical-align:middle}
+.pill::before{content:"";width:.72em;height:.72em;border-radius:50%;background:currentColor;flex:none}
+.m-live{color:var(--ok)} .m-built{color:var(--info)} .m-built::before{background:transparent;box-shadow:inset 0 0 0 2px currentColor}
+.m-dir{color:var(--warn)} .m-dir::before{border-radius:1px;transform:rotate(45deg) scale(.85)}
+.m-not{color:var(--faint)} .m-not::before{background:transparent;box-shadow:inset 0 0 0 1.5px currentColor}
+
+/* gap placeholder: amber and dashed means information is missing. Never invent a number. */
+.gap{display:inline-block;background:var(--gapbg);border:1px dashed var(--gapline);color:var(--gapink);border-radius:2px;padding:0 .45em;font-size:.84em;font-weight:600;line-height:1.5;margin:1px 0}
+.gap::before{content:"GAP · ";font-size:.78em;letter-spacing:.07em;font-weight:760}
+.gap[data-k="num"]::before{content:"NUMBER · "} .gap[data-k="fact"]::before{content:"FACT · "} .gap[data-k="dec"]::before{content:"DECISION · "}
+.gap[data-k="ver"]::before{content:"VERIFY · "} .gap[data-k="own"]::before{content:"OWNER · "} .gap[data-k="date"]::before{content:"DATE · "}
+.kpi .gap{font-size:.5em;vertical-align:middle}
+
+/* audience tags and sources: visible in review, hidden in presentation mode */
+.aud{display:inline-flex;gap:.35em;margin-left:.8em;vertical-align:middle}
+.aud i{font-style:normal;font-size:.82em;font-weight:700;letter-spacing:.06em;padding:0 .45em;border:1px solid var(--line);color:var(--faint);border-radius:2px;text-transform:uppercase}
+body.present .aud, body.present .src{display:none}
+.cust{display:none} body[data-cut="customer"] .cust{display:block}
+body[data-cut="customer"] .gap, body[data-cut="customer"] .src, body[data-cut="customer"] .int, body[data-cut="customer"] .wipbadge{display:none}
+
+/* title slide */
+.slide.title-slide{background:var(--deep);color:#fff;justify-content:center;padding:0 5.2em 2em}
+.title-slide .eyebrow{color:#A9C0E3;margin-bottom:.8em}
+.title-slide h1{font-size:3.3em;line-height:1.07;max-width:14em;margin:0 0 .5em;color:#fff}
+.title-slide .lede{color:#D5E0F0;max-width:36em} .title-slide .lede strong{color:#fff}
+.title-slide .byline{margin-top:2.2em;font-size:.8em;color:#9DB4D6}
+
+/* chrome: progress, section bar, page counter, gear */
+.progress{position:absolute;top:0;left:0;height:3px;background:var(--accent);z-index:6;transition:width .18s ease}
+.chrome{position:absolute;left:0;right:0;bottom:0;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 54px;font-size:11.5px;color:var(--faint);z-index:5}
+.chrome::before{content:"";position:absolute;top:0;left:54px;right:54px;height:1px;background:var(--line)}
+.chrome .brandmark{letter-spacing:.1em;text-transform:uppercase;font-weight:650}
+.chrome .tools{display:flex;align-items:center;gap:4px}
+.chrome button{font:inherit;font-size:14px;background:transparent;border:1px solid transparent;color:inherit;border-radius:3px;padding:3px 8px;cursor:pointer;line-height:1}
+.chrome button:hover,.chrome .gear[aria-expanded="true"]{border-color:var(--line);color:var(--deep)}
+.chrome .count{min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+.secnav{display:flex;gap:2px;align-items:center}
+.secnav a{padding:3px 9px;border-radius:3px;color:inherit;cursor:pointer;white-space:nowrap;border:1px solid transparent}
+.secnav a:hover{border-color:var(--line);color:var(--deep)} .secnav a.on{background:var(--deep);color:#fff;font-weight:650}
+.stage.on-dark .chrome{color:#8FA6CC} .stage.on-dark .chrome::before{background:rgba(255,255,255,.16)}
+.stage.on-dark .chrome button:hover,.stage.on-dark .chrome .gear[aria-expanded="true"],.stage.on-dark .secnav a:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.stage.on-dark .secnav a.on{background:#fff;color:var(--deep)}
+
+/* settings panel (opens above the gear) */
+.settings{position:fixed;right:16px;bottom:16px;width:300px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px 16px 12px;box-shadow:0 14px 36px rgba(0,0,0,.32);z-index:50;font:13px/1.45 var(--sans);color:var(--dim)}
+.settings[hidden]{display:none}
+.settings h4{margin:0 0 7px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.settings .opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.settings .opts button{display:flex;justify-content:space-between;gap:6px;font:inherit;color:var(--dim);padding:6px 9px;border:1px solid var(--line);border-radius:4px;background:#fff;cursor:pointer}
+.settings .opts button span{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+.settings .opts button:hover{border-color:var(--accent);color:var(--accent)}
+.settings .opts button.on{background:var(--deep);border-color:var(--deep);color:#fff;font-weight:650} .settings .opts button.on span{color:#BBCDE6}
+.settings label{display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 0;border-top:1px solid var(--line)}
+.settings .hint{margin:-4px 0 10px;font-size:11.5px;color:var(--faint);line-height:1.4}
+
+/* slide status badge (review view only) */
+.wipbadge{position:absolute;top:1.05em;right:1.4em;z-index:4;display:none;font-size:.7em;font-weight:780;letter-spacing:.1em;padding:.15em .6em;border:1.5px solid var(--gapline);background:var(--gapbg);color:var(--gapink);border-radius:2px}
+body.view-all .slide[data-status="wip"] .wipbadge{display:block}
+
+/* ---------- interactive blocks (class "ix"): all states live in the HTML, JS only switches which is visible ---------- */
+.ix button{font:inherit;color:inherit;text-align:left;cursor:pointer}
+.ix button:focus-visible,.ix input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.ix-bar{display:flex;align-items:center;gap:.8em;flex-wrap:wrap;margin:.1em 0 .45em}
+.ix-bar .lab{font-size:.74em;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.ix-switch{display:inline-flex;border:1px solid var(--line);border-radius:4px;padding:2px;gap:2px;background:#fff}
+.ix-switch button{border:0;background:transparent;padding:.28em .95em;font-size:.82em;font-weight:650;color:var(--dim);border-radius:3px}
+.ix-switch button[aria-pressed="true"]{background:var(--deep);color:#fff}
+.ix-hint{font-size:.78em;color:var(--faint)}
+/* pick-and-explain: a list of rows on the left, one detail panel on the right */
+.ix-map{display:grid;grid-template-columns:1.2fr 1fr;gap:1em;align-items:start}
+.ix-rows{display:flex;flex-direction:column;gap:.34em}
+.ix-row{display:grid;grid-template-columns:8.8em 1fr;gap:.7em;align-items:start;width:100%;background:var(--panel);border:0;border-left:4px solid var(--line);padding:.4em .7em}
+.ix-row:hover{border-left-color:var(--faint)}
+.ix-row[aria-pressed="true"]{border-left-color:var(--accent);background:#E7EEF8}
+.ix-row .nm{font-weight:650;color:var(--deep);font-size:.86em;line-height:1.25;display:flex;flex-direction:column;gap:.15em}
+.ix-row .tx{font-size:.8em;color:var(--dim);line-height:1.35}
+.ix-panels{display:grid} /* panels share one grid cell, so the slide height never changes on click */
+.ix-panel{grid-area:1/1;background:#fff;border:1px solid var(--line);border-top:3px solid var(--accent);padding:.7em .95em .8em}
+.ix-panel:not(.on){visibility:hidden}
+.ix-panel h3{margin:0 0 .3em;font-size:1.05em}
+.ix-panel .k{margin:.55em 0 .1em;font-size:.64em;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.ix-panel p{margin:0;font-size:.82em;color:var(--dim);line-height:1.4}
+/* today / target switch: .t-today shows by default, .t-target when the block has class mode-target */
+.ix:not(.mode-target) .t-target,.ix.mode-target .t-today{display:none!important}
+/* card picker: three big cards on top, a detail panel below */
+.es-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.8em;margin-top:.5em}
+.es-card{background:var(--panel);border:0;border-top:3px solid var(--line);padding:.6em .85em .7em;width:100%}
+.es-card:hover{border-top-color:var(--faint)} .es-card[aria-pressed="true"]{border-top-color:var(--accent);background:#E7EEF8}
+.es-card .rb{font-size:.64em;letter-spacing:.1em;font-weight:760;text-transform:uppercase;color:var(--accent)}
+.es-card h3{margin:.15em 0;font-size:1em} .es-card p{margin:0;font-size:.8em;color:var(--dim)}
+.es-panels{display:grid;margin-top:.7em}
+.es-panel{grid-area:1/1;display:grid;grid-template-columns:1fr 1fr;gap:.1em 1.4em;align-content:start;background:#fff;border:1px solid var(--line);padding:.55em .95em .7em}
+.es-panel:not(.on){visibility:hidden}
+.es-panel .k{margin:.5em 0 .1em;font-size:.64em;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700} .es-panel p{margin:0;font-size:.82em;color:var(--dim)}
+/* slider model: two sliders move a bar, a sentence explains the result */
+.ix-cash{display:grid;grid-template-columns:1fr 1.15fr;gap:1em;align-items:start}
+.ix-lab{display:flex;justify-content:space-between;align-items:baseline;font-size:.86em;color:var(--dim);margin-top:.7em} .ix-lab b{color:var(--deep);font-variant-numeric:tabular-nums}
+.ix input[type=range]{width:100%;accent-color:var(--accent);margin:.25em 0 0}
+.ix-presets{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.8em}
+.ix-presets button{border:1px solid var(--line);background:#fff;border-radius:4px;padding:.28em .7em;font-size:.78em;color:var(--dim)} .ix-presets button:hover{border-color:var(--accent);color:var(--accent)}
+.bar-row{margin-top:.55em} .bar-row .bl{font-size:.82em;color:var(--dim);display:flex;justify-content:space-between;gap:1em} .bar-row .bl b{font-variant-numeric:tabular-nums;color:var(--deep)}
+.bar{position:relative;height:1.5em;background:#fff;border:1px solid var(--line);margin-top:.25em}
+.bar .zero{position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--faint)}
+.bar i{position:absolute;top:2px;bottom:2px;background:var(--ok);transition:width .15s,left .15s} .bar i.neg{background:var(--bad)}
+
+/* step reveal: add class "pop" and style="--d:N" to any element or SVG group */
+@keyframes pop{from{opacity:0}to{opacity:1}}
+.slide.active .pop{animation:pop .55s ease both;animation-delay:calc(var(--d,0) * .32s)}
+/* line draw: add class="draw" and pathLength="1" to an SVG path; it draws itself when the slide opens */
+@keyframes draw{to{stroke-dashoffset:0}}
+.draw{stroke-dasharray:1;stroke-dashoffset:1}
+.slide.active .draw{animation:draw 2.4s ease-in forwards;animation-delay:calc(var(--d,0) * .32s)}
+@media (prefers-reduced-motion:reduce){.slide.active .pop{animation:none}.draw{stroke-dashoffset:0}.slide.active .draw{animation:none}}
+
+/* figures: inline SVG on a warm panel. Colors for SVG: slate #31495B, terracotta #CD5C4E, sage #5B6676, cream #FAF8F1 */
+.fig{margin:.5em 0 0;flex:1 1 auto;min-height:0;background:#FAF8F1;border:1px solid #E9E8DC;border-radius:6px;padding:.5em .6em .3em;display:flex;flex-direction:column}
+.fig svg{display:block;width:100%;flex:1 1 auto;min-height:0} .fig figcaption{font-size:.8em;color:var(--dim);padding:.35em .3em 0}
+.fig .t{font:600 15px var(--sans);fill:#242424} .fig .ts{font:500 12.5px var(--sans);fill:#5B6676} .fig .tw{font:700 16px var(--sans);fill:#fff}
+.fig .f-card{fill:#fff;stroke:#31495B;stroke-width:2.5} .fig .f-slate{fill:#31495B} .fig .f-terra{fill:#CD5C4E} .fig .f-sage{fill:#5B6676}
+.fig .ar{fill:none;stroke:#5B6676;stroke-width:2.5;marker-end:url(#ah)}
+
+/* ================= THEMES ================= */
+/* clean = the :root tokens above (reports, workshops, steering groups). keynote = big-text stage talks. */
+body[data-theme="keynote"]{
+  --ink:#151515; --dim:#3F3F3F; --faint:#8C8A85; --line:#E4E0D6; --panel:#F3EFE6;
+  --deep:#151515; --brand:#5B5B5B; --accent:#D6362B;
+  --kbg:#FBFAF6; --kdark:#141414;
+  --sans:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  background:#0E0E0E;
+}
+body[data-theme="keynote"] .stage, body[data-theme="keynote"] .slide{background:var(--kbg)}
+body[data-theme="keynote"] .slide.title-slide{background:var(--kdark)}
+body[data-theme="keynote"] .title-slide .eyebrow{color:var(--accent)} body[data-theme="keynote"] .title-slide .lede{color:#E8E5DD;font-size:1.6em} body[data-theme="keynote"] .title-slide .byline{color:#A8A59D;font-size:1em}
+body[data-theme="keynote"] .title-slide h1{font-size:3.8em;max-width:13em}
+body[data-theme="keynote"] .chrome .brandmark, body[data-theme="keynote"] .secnav{display:none}
+body[data-theme="keynote"] .chrome{justify-content:flex-end}
+body[data-theme="keynote"].present .chrome{opacity:0;transition:opacity .2s}
+body[data-theme="keynote"].present .chrome:hover{opacity:1}
+body[data-theme="keynote"] .progress{height:4px}
+body[data-theme="keynote"] h2{font-size:2.1em}
+/* keynote keeps sources on screen (small) because stats must be credible from the back row */
+body[data-theme="keynote"].present .src{display:block}
+body[data-theme="keynote"] .src{font-size:.78em;text-align:center;border-top:0!important}
+.big > .src,.num > .src{position:absolute;left:3em;right:3em;bottom:3.6em;margin:0;padding:0}
+.media > .src{margin:.5em 0 0;padding:0}
+
+/* ================= KEYNOTE PATTERNS ================= */
+/* big: one statement, centred. The slide is the speaker's prompt, so the words ARE the cue. */
+.slide.big{justify-content:center;align-items:center;text-align:center;padding:2.5em 4.5em 3.6em}
+.big .say{margin:0;font-size:3.3em;font-weight:700;line-height:1.12;letter-spacing:-.022em;max-width:15.5em;color:var(--deep)}
+.big .say.l{font-size:4.4em} .big .say.s{font-size:2.5em}
+.big .small{margin:.8em 0 0;font-size:1.6em;color:var(--dim);max-width:34em;line-height:1.4}
+.big .kick{margin:0 0 .9em;font-size:.9em;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.em{color:var(--accent)}
+.strike{text-decoration:line-through;text-decoration-thickness:.09em;text-decoration-color:var(--accent);color:var(--faint)}
+/* dark: inverted big slide for turning points */
+.slide.dark{background:var(--kdark,#141414)!important}
+.dark .say,.dark h2{color:#fff} .dark .small{color:#C9C6BE} .dark .src{color:#8C8A85}
+/* num: one huge number, one line of meaning, a source */
+.slide.num{justify-content:center;align-items:center;text-align:center}
+.num .n{margin:0;font-size:8em;font-weight:800;line-height:.95;letter-spacing:-.04em;color:var(--accent);font-variant-numeric:tabular-nums}
+.num .say{margin:.25em 0 0;font-size:2em;font-weight:650;line-height:1.2;max-width:22em;color:var(--deep)}
+.num .small{margin:.5em 0 0;font-size:1.4em;color:var(--dim)}
+/* list: up to 3 short lines, big */
+.slide.list{justify-content:center;padding-left:6em;padding-right:6em}
+.list ol,.list ul{margin:0;padding:0;list-style:none;counter-reset:k}
+.list li{font-size:2.2em;font-weight:650;line-height:1.2;margin:.38em 0;color:var(--deep);counter-increment:k;display:flex;gap:.6em;align-items:baseline}
+.list ol li::before{content:counter(k);color:var(--accent);font-weight:800;min-width:.8em}
+.list li span{font-weight:400;color:var(--dim);font-size:.62em}
+/* two: two columns of short big lines (growing vs shrinking) */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2.4em;margin-top:.6em;flex:1;align-content:center}
+.two h3{font-size:1.3em;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5em}
+.two ul{margin:0;padding:0;list-style:none} .two li{font-size:1.45em;line-height:1.25;padding:.28em 0;border-bottom:1px solid var(--line);color:var(--deep)}
+.two li.new{border-bottom:0;color:var(--accent);font-weight:650}
+/* media: full image or gif. If the file is missing, a dashed MEDIA slot says what to add and where. */
+.slide.media{padding:1.6em 2.2em 3.2em;justify-content:center;align-items:center}
+.media .slot{flex:1 1 auto;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+.media .slot img,.media .slot video{max-width:100%;max-height:100%;object-fit:contain}
+.media .cap{margin:.6em 0 0;font-size:1.5em;font-weight:650;color:var(--deep);text-align:center}
+.need{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4em;width:80%;height:80%;border:3px dashed var(--gapline);background:var(--gapbg);color:var(--gapink);border-radius:8px;text-align:center;padding:1em}
+.need b{font-size:1.4em} .need code{font-size:1em}
+body.present .need{border-color:var(--line);background:var(--panel);color:var(--faint)}
+/* figure slide in keynote: small title, big figure */
+body[data-theme="keynote"] .fig{background:transparent;border:0;padding:0}
+.fig .tl{font:700 22px var(--sans);fill:#151515} .fig .tm{font:600 17px var(--sans);fill:#3F3F3F} .fig .tx2{font:500 15px var(--sans);fill:#6B6B6B}
+.fig .k-accent{fill:#D6362B} .fig .k-ink{fill:#151515} .fig .k-soft{fill:#F3EFE6;stroke:#151515;stroke-width:2.5} .fig .k-line{fill:none;stroke:#151515;stroke-width:2.5}
+.fig .k-dash{fill:none;stroke:#8C8A85;stroke-width:2;stroke-dasharray:6 6}
+.fig .ark{fill:none;stroke:#151515;stroke-width:2.5;marker-end:url(#ahk)}
+/* talking points (debug): <aside class="note"> inside a slide; shown in a bar at the bottom when enabled (settings or key T) */
+.slide .note{display:none}
+.cue{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;padding:12px 28px 14px;background:rgba(20,20,20,.92);color:#F3EFE6;font:500 19px/1.4 var(--sans);border-top:3px solid var(--accent)}
+.cue b{color:var(--accent);font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-right:12px}
+.cue .tip{color:#C9C6BE;font-size:16px} .cue .say{display:block;margin-top:6px;color:#fff;font-size:21px;line-height:1.4} .cue .say::before{content:"SAY  ";color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.12em}
+body.cues .cue{display:block}
+/* blackout (clicker "blank screen" button: B or .) */
+.blackout{position:fixed;inset:0;background:#000;z-index:100;display:none} body.black .blackout{display:block}
+
+@media print{
+  @page{size:13.333in 7.5in;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  .stage{position:static;transform:none;box-shadow:none;width:auto;height:auto;overflow:visible}
+  .slide{position:relative;visibility:visible;width:13.333in;height:7.5in;page-break-after:always;break-after:page}
+  .slide.out{display:none} .chrome,.progress,.settings,.cue{display:none!important}
+  .draw{stroke-dashoffset:0!important;animation:none!important} .pop{animation:none!important;opacity:1!important}
+}
+</style>
+</head>
+<body data-theme="keynote">
+<div class="blackout"></div>
+<div class="cue" id="cue" aria-live="polite"></div>
+<main class="stage" id="stage">
+<div class="progress"></div>
+
+<!-- shared SVG parts (arrow head). Zero-size, not display:none, so references resolve. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6676"/></marker>
+  <marker id="ahk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#151515"/></marker>
+</defs></svg>
+
+<!-- SLIDES:START -->
+<!-- Starter deck for talk-deck. Edit the words, keep the markup.
+     Build:  python3 scripts/build.py assets/starter-slides.html my-deck.html --title "My talk" --theme keynote
+     Press T in the deck to see the talking points (the <aside class="note"> on each slide). -->
+
+<section class="slide title-slide" data-aud="all" data-status="system" data-nav="open">
+  <p class="eyebrow">Your event · Month Year</p>
+  <h1>One sentence that makes people curious.</h1>
+  <p class="lede"><strong>A second line that says who it is for.</strong></p>
+  <p class="byline">Your Name</p>
+</section>
+
+<section class="slide big" data-aud="all" data-status="ready" data-nav="start" data-nav-label="Start">
+  <p class="say">One idea per slide.</p>
+  <p class="small">The words on the slide are your cue. If you need a second idea, make a second slide.</p>
+</section>
+
+<section class="slide big dark" data-aud="all" data-status="ready" data-nav="start">
+  <p class="say">A turning point goes dark.</p>
+  <p class="small">Use it once or twice per section, not on every slide.</p>
+</section>
+
+<section class="slide num" data-aud="all" data-status="ready" data-nav="start">
+  <p class="n">42%</p>
+  <p class="say">A number gets a slide of its own.</p>
+  <p class="src">Source name, date (every number carries its source)</p>
+</section>
+
+<section class="slide list" data-aud="all" data-status="ready" data-nav="build" data-nav-label="Build">
+  <h2>Up to three points.</h2>
+  <ol>
+    <li>First point <span>one short line of detail</span></li>
+    <li>Second point <span>one short line of detail</span></li>
+    <li>Third point <span>one short line of detail</span></li>
+  </ol>
+</section>
+
+<section class="slide" data-aud="all" data-status="ready" data-nav="build">
+  <h2>Two columns for a comparison.</h2>
+  <div class="two">
+    <div><h3>Before</h3><ul><li>A short line</li><li>Another short line</li></ul></div>
+    <div><h3>After</h3><ul><li>A short line</li><li class="new">The one to look at</li></ul></div>
+  </div>
+</section>
+
+<section class="slide" data-aud="all" data-status="ready" data-nav="build">
+  <h2>A picture builds itself.</h2>
+  <figure class="fig"><svg viewBox="0 0 1180 420" role="img" aria-label="Three steps: idea, draft, talk, with arrows between them.">
+    <g class="pop" style="--d:0"><rect x="60" y="150" width="280" height="120" rx="16" class="k-soft"/><text x="200" y="222" text-anchor="middle" class="tl">Idea</text></g>
+    <g class="pop" style="--d:1"><path d="M350 210 H 420" class="ark"/></g>
+    <g class="pop" style="--d:2"><rect x="430" y="150" width="280" height="120" rx="16" class="k-soft"/><text x="570" y="222" text-anchor="middle" class="tl">Draft</text></g>
+    <g class="pop" style="--d:3"><path d="M720 210 H 790" class="ark"/></g>
+    <g class="pop" style="--d:4"><rect x="800" y="150" width="320" height="120" rx="16" class="k-accent"/><text x="960" y="222" text-anchor="middle" class="tw">Talk</text></g>
+  </svg></figure>
+  <p class="small" style="text-align:center">Groups with class="pop" appear one after another. No clicks needed.</p>
+</section>
+
+<section class="slide media" data-aud="all" data-status="ready" data-nav="build">
+  <div class="slot"><div class="need" data-file="media/example.png"><b>ADD</b> a screenshot or photo<code>media/example.png</code></div></div>
+  <p class="cap">An image slide. Save a file as media/example.png next to this file and rebuild.</p>
+</section>
+
+<section class="slide big dark" data-aud="all" data-status="ready" data-nav="close" data-nav-label="Close">
+  <p class="say">Questions?</p>
+  <p class="small">Your Name · your-site.example</p>
+</section>
+<!-- SLIDES:END -->
+
+<div class="chrome">
+  <span class="brandmark"> &middot; talk-deck starter</span>
+  <nav class="secnav" id="secnav" aria-label="Sections"></nav>
+  <span class="tools">
+    <button class="gear" id="gear" type="button" aria-label="Settings" aria-expanded="false" aria-controls="settings" title="Settings">&#9881;&#65038;</button>
+    <button data-prev type="button" aria-label="Previous slide">&larr;</button>
+    <span class="count"></span>
+    <button data-next type="button" aria-label="Next slide">&rarr;</button>
+  </span>
+</div>
+</main>
+
+<div class="settings" id="settings" hidden>
+  <h4>Slides shown</h4>
+  <div class="opts" id="views"><button type="button" data-view="ready">Ready only <span></span></button><button type="button" data-view="all">All (review) <span></span></button></div>
+  <p class="hint">Ready only is the presentable deck. All adds work in progress with a WIP badge. Key W.</p>
+  <h4>Length</h4>
+  <div class="opts" id="lens"><button type="button" data-len="full">Full <span></span></button><button type="button" data-len="short">Short <span></span></button></div>
+  <p class="hint">Short keeps one summary per section. Key S. The bottom bar jumps between sections.</p>
+  <h4>Audience</h4>
+  <div class="opts" id="cuts"><!-- one button per audience, built from data-aud --></div>
+  <label><input type="checkbox" id="tog-cues"> Talking points (debug)</label>
+  <p class="hint">Shows a suggested talking point for each slide at the bottom of the screen. Key T. Off by default.</p>
+  <label><input type="checkbox" id="tog-present"> Presentation mode</label>
+  <p class="hint">On hides audience tags and sources. Off shows them for review. Key M.</p>
+</div>
+
+<script>
+/* Talking points: off by default; remembered per deck where storage works. */
+(function () {
+  var KEY = 'talk-deck-cues:' + location.pathname, bar = document.getElementById('cue');
+  window.__cue = function (slide, n, total) {
+    if (!bar || !slide) return;
+    var note = slide.querySelector('.note');
+    bar.innerHTML = '<b>' + n + ' / ' + total + '</b>' + (note ? note.innerHTML : '<i>No talking point for this slide.</i>');
+  };
+  function set(on) {
+    document.body.classList.toggle('cues', on);
+    var t = document.getElementById('tog-cues'); if (t) t.checked = on;
+    try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {}
+  }
+  window.__cueToggle = function () { set(!document.body.classList.contains('cues')); };
+  document.addEventListener('DOMContentLoaded', function () {
+    var t = document.getElementById('tog-cues');
+    if (t) t.addEventListener('change', function () { set(t.checked); });
+    var on = false; try { on = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    set(on);
+  });
+})();
+</script>
+<script>
+/* Navigation, audience cuts, length, status views, gap register, section bar, fit and scale.
+   Dependency-free. Views are selections of one master and never navigate the page, so they also work in sandboxed previews. */
+(function () {
+  var W = 1280, H = 720, MIN_FIT = 0.58, MAX_FIT = 1.25;
+  var KINDS = { num: 'Number', fact: 'Fact', dec: 'Decision', ver: 'Verify', own: 'Owner', date: 'Date' };
+  var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+  var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+  var stage = document.getElementById('stage');
+  var all = $$('.slide');
+  var cut = 'all', viewAll = true, short = false, slides = all, i = 0;
+  var inCut = function (s, c) { return c === 'all' || (s.getAttribute('data-aud') || '').split(/\s+/).indexOf(c) >= 0; };
+  var okStatus = function (s) { var st = s.getAttribute('data-status'); return st === 'ready' || st === 'system'; };
+  var isShown = function (s, c, toAll, sh) { return inCut(s, c) && (!sh || s.hasAttribute('data-short')) && (toAll || okStatus(s)); };
+
+  /* audience buttons, built from the tags used on slides ("all" is implicit) */
+  var auds = [];
+  all.forEach(function (s) { (s.getAttribute('data-aud') || '').split(/\s+/).forEach(function (a) { if (a && a !== 'all' && auds.indexOf(a) < 0) auds.push(a); }); });
+  var cutsHost = document.getElementById('cuts');
+  ['all'].concat(auds).forEach(function (a) {
+    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('data-cut', a);
+    b.innerHTML = (a === 'all' ? 'All slides' : esc(a.charAt(0).toUpperCase() + a.slice(1))) + ' <span></span>';
+    b.addEventListener('click', function () { applyCut(a); });
+    cutsHost.appendChild(b);
+  });
+
+  /* audience tags next to the eyebrow, visible in review only */
+  all.forEach(function (s) {
+    var a = (s.getAttribute('data-aud') || '').trim(), ey = s.querySelector('.eyebrow');
+    if (!a || !ey || s.classList.contains('title-slide')) return;
+    var w = document.createElement('span'); w.className = 'aud';
+    a.split(/\s+/).forEach(function (x) { var t = document.createElement('i'); t.textContent = x; w.appendChild(t); });
+    ey.appendChild(w);
+  });
+  all.forEach(function (s) { /* WIP badge */
+    if (s.getAttribute('data-status') !== 'wip') return;
+    var b = document.createElement('span'); b.className = 'wipbadge'; b.textContent = 'WIP'; s.appendChild(b);
+  });
+
+  /* gap register, generated from the slides in view so it cannot drift */
+  function buildRegister() {
+    var body = document.getElementById('gap-body'); if (!body) return;
+    var n = 0, rows = [];
+    slides.forEach(function (s, k) {
+      $$('.gap', s).forEach(function (g) {
+        var h = s.querySelector('h2,h1');
+        rows.push('<tr><td>' + (++n) + '</td><td>' + esc(KINDS[g.getAttribute('data-k')] || 'Fact') + '</td><td>' + esc(g.textContent) + '</td><td>' + esc(g.getAttribute('data-o') || '') + '</td><td><a data-go="' + (k + 1) + '" style="cursor:pointer">' + (k + 1) + ' · ' + esc(h ? h.textContent.slice(0, 54) : '') + '</a></td></tr>');
+      });
+    });
+    body.innerHTML = rows.join('') || '<tr><td colspan="5">No open gaps.</td></tr>';
+  }
+
+  /* section bar: one link per data-nav key in view; label comes from the first slide that carries data-nav-label */
+  function buildNav() {
+    var host = document.getElementById('secnav'); host.innerHTML = ''; var seen = {};
+    slides.forEach(function (s, k) {
+      var key = s.getAttribute('data-nav') || 'appendix'; if (seen[key]) return; seen[key] = 1;
+      var lab = null; all.forEach(function (x) { if (!lab && x.getAttribute('data-nav') === key && x.getAttribute('data-nav-label')) lab = x.getAttribute('data-nav-label'); });
+      var a = document.createElement('a'); a.textContent = lab || key; a.setAttribute('data-nav', key);
+      a.addEventListener('click', function () { show(k); }); host.appendChild(a);
+    });
+  }
+  function refreshCounts() {
+    $$('#cuts button').forEach(function (b) { var c = b.getAttribute('data-cut'); b.className = c === cut ? 'on' : ''; b.querySelector('span').textContent = all.filter(function (s) { return isShown(s, c, viewAll, short); }).length; });
+    $$('#views button').forEach(function (b) { var t = b.getAttribute('data-view') === 'all'; b.className = t === viewAll ? 'on' : ''; b.querySelector('span').textContent = all.filter(function (s) { return isShown(s, cut, t, short); }).length; });
+    $$('#lens button').forEach(function (b) { var t = b.getAttribute('data-len') === 'short'; b.className = t === short ? 'on' : ''; b.querySelector('span').textContent = all.filter(function (s) { return isShown(s, cut, viewAll, t); }).length; });
+  }
+  function applyCut(c) {
+    cut = c; document.body.setAttribute('data-cut', c);
+    slides = all.filter(function (s) { return isShown(s, c, viewAll, short); });
+    if (!slides.length) { slides = all; }
+    document.body.classList.toggle('view-all', viewAll);
+    all.forEach(function (s) { s.classList.remove('active'); s.classList.toggle('out', slides.indexOf(s) < 0); });
+    buildRegister(); refreshCounts(); buildNav(); show(0);
+  }
+  function keep(fn) { var cur = slides[i]; fn(); applyCut(cut); var k = slides.indexOf(cur); if (k >= 0) show(k); fitAll(); }
+  function setView(a) { keep(function () { viewAll = !!a; }); }
+  function setLen(a) { keep(function () { short = !!a; }); }
+
+  var progress = document.querySelector('.progress'), counter = document.querySelector('.count');
+  function syncUrl() { /* deep link; silently skipped where the host forbids it */
+    try { var q = []; if (cut !== 'all') q.push('cut=' + cut); if (!viewAll) q.push('view=ready'); if (short) q.push('len=short');
+      history.replaceState(null, '', (q.length ? '?' + q.join('&') : '') + '#' + (i + 1)); } catch (e) {}
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('active', k === i); });
+    stage.classList.toggle('on-dark', slides[i].classList.contains('title-slide') || slides[i].classList.contains('dark'));
+    counter.textContent = (i + 1) + ' / ' + slides.length;
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    var cur = slides[i].getAttribute('data-nav') || 'appendix';
+    $$('#secnav a').forEach(function (a) { a.className = a.getAttribute('data-nav') === cur ? 'on' : ''; });
+    syncUrl();
+    if (window.__cue) window.__cue(slides[i], i + 1, slides.length);
+    /* videos play only on the slide that is showing, from the start */
+    [].forEach.call(document.querySelectorAll('.slide video'), function (v) {
+      if (slides[i].contains(v)) { try { v.currentTime = 0; } catch (x) {} var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      else if (!v.paused) v.pause();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var tg = e.target;
+    if (tg && /^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName)) return;
+    if (tg && tg.closest && tg.closest('.ix') && e.key === ' ') return; /* interactive blocks keep Space */
+    switch (e.key) {
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Enter': show(i + 1); e.preventDefault(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace': show(i - 1); e.preventDefault(); break;
+      case 'b': case 'B': case '.': document.body.classList.toggle('black'); e.preventDefault(); break; /* clicker blank-screen */
+      case 'f': case 'F': try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); } catch (x) {} break;
+      case 'Home': show(0); e.preventDefault(); break;
+      case 'End': show(slides.length - 1); e.preventDefault(); break;
+      case 'p': case 'P': try { window.print(); } catch (x) {} break;
+      case 'm': case 'M': setMode(!document.body.classList.contains('present')); break;
+      case 'w': case 'W': setView(!viewAll); break;
+      case 's': case 'S': setLen(!short); break;
+      case 't': case 'T': if (window.__cueToggle) window.__cueToggle(); break;
+    }
+  });
+  /* touch: swipe left/right to move; tap the right third for next, the left third for back */
+  var tx = null, ty = null;
+  document.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) { tx = null; return; }
+    var t = e.target;
+    if (t.closest && (t.closest('.settings') || t.closest('.ix') || t.closest('.chrome') || t.closest('a,button,input'))) { tx = null; return; }
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (tx === null) return;
+    var p = e.changedTouches[0], dx = p.clientX - tx, dy = p.clientY - ty; tx = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) { show(dx < 0 ? i + 1 : i - 1); return; }
+    if (Math.abs(dx) < 12 && Math.abs(dy) < 12) {
+      if (p.clientX > innerWidth * 2 / 3) show(i + 1); else if (p.clientX < innerWidth / 3) show(i - 1);
+    }
+  }, { passive: true });
+  document.querySelector('[data-prev]').addEventListener('click', function () { show(i - 1); });
+  document.querySelector('[data-next]').addEventListener('click', function () { show(i + 1); });
+  document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('[data-go]'); if (t) show(parseInt(t.getAttribute('data-go'), 10) - 1); });
+  $$('#views button').forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view') === 'all'); }); });
+  $$('#lens button').forEach(function (b) { b.addEventListener('click', function () { setLen(b.getAttribute('data-len') === 'short'); }); });
+
+  /* scale the canvas to the window, then shrink dense slides (and grow sparse ones) until they fill one page */
+  function rescale() { var s = Math.min(innerWidth / W, innerHeight / H); if (!isFinite(s) || s < 0.1) s = 1; stage.style.setProperty('--s', s); }
+  function fitAll() {
+    var report = {};
+    all.forEach(function (s, k) {
+      s.style.removeProperty('--fit'); var f = 1;
+      while (s.scrollHeight > s.clientHeight + 1 && f > MIN_FIT) { f = Math.round((f - 0.02) * 100) / 100; s.style.setProperty('--fit', f); }
+      if (f === 1 && !s.classList.contains('title-slide') && s.id !== 'gap-slide') {
+        while (f < MAX_FIT) { var g = Math.round((f + 0.02) * 100) / 100; s.style.setProperty('--fit', g); if (s.scrollHeight > s.clientHeight + 1) { s.style.setProperty('--fit', f); break; } f = g; }
+      }
+      if (f !== 1) report[k + 1] = f;
+    });
+    window.__fit = report; /* slide number -> factor; a value near MIN_FIT means split the slide */
+  }
+  addEventListener('resize', rescale); addEventListener('pageshow', rescale);
+  if (window.ResizeObserver) new ResizeObserver(rescale).observe(document.documentElement);
+  rescale(); setTimeout(rescale, 300);
+
+  /* settings panel */
+  var gear = document.getElementById('gear'), panel = document.getElementById('settings');
+  function setOpen(open) {
+    if (open) { var r = gear.getBoundingClientRect(); panel.style.right = Math.max(8, innerWidth - r.right) + 'px'; panel.style.bottom = Math.max(8, innerHeight - r.top + 8) + 'px'; }
+    panel.hidden = !open; gear.setAttribute('aria-expanded', String(open));
+  }
+  gear.addEventListener('click', function (e) { e.stopPropagation(); setOpen(panel.hidden); });
+  document.addEventListener('click', function (e) { if (!panel.hidden && !panel.contains(e.target)) setOpen(false); });
+  panel.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setOpen(false); gear.focus(); } e.stopPropagation(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+  /* presentation mode: on hides audience tags and sources. Default on; remembered where storage works. */
+  var MODEKEY = 'talk-deck-presentation:' + location.pathname, tog = document.getElementById('tog-present');
+  function applyMode(on) { document.body.classList.toggle('present', on); tog.checked = on; fitAll(); }
+  function setMode(on) { applyMode(on); try { localStorage.setItem(MODEKEY, on ? '1' : '0'); } catch (e) {} }
+  tog.addEventListener('change', function () { setMode(tog.checked); });
+
+  /* start: read ?cut= ?view= ?len= and #slide before applyCut rewrites the URL */
+  var wanted = 'all', start = parseInt((location.hash || '').replace('#', ''), 10);
+  try { var qp = new URLSearchParams(location.search); wanted = (qp.get('cut') || 'all').toLowerCase(); viewAll = qp.get('view') !== 'ready'; short = qp.get('len') === 'short'; } catch (e) {}
+  if (wanted !== 'all' && auds.indexOf(wanted) < 0) wanted = 'all';
+  var present = true; try { var st = localStorage.getItem(MODEKEY); if (st !== null) present = st === '1'; } catch (e) {}
+  applyCut(wanted); if (!isNaN(start)) show(start - 1);
+  applyMode(present);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+  addEventListener('load', function () { rescale(); fitAll(); });
+})();
+</script>
+<script>
+/* Media slots: <div class="need" data-file="media/x.png">…</div> becomes the image once the file exists next to the deck.
+   Any of .png .jpg .jpeg .gif .webp works for the same name, so "x.jpg" fills a slot that asks for "x.png". Video: .mp4 or .webm.
+   Remote video with an image stand-in: add data-video="https://…mp4" to the slot. The image shows first; the video replaces it
+   only once it has loaded, so offline or a blocked source still shows the image. Muted, looped, plays while its slide is up. */
+(function () {
+  var EXT = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'PNG', 'JPG', 'JPEG', 'GIF', 'WEBP'];
+  function upgrade(img, url) {
+    var v = document.createElement('video');
+    v.muted = v.loop = v.playsInline = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+    v.preload = 'auto'; v.poster = img.src; if (img.alt) v.setAttribute('aria-label', img.alt);
+    v.addEventListener('loadeddata', function () {
+      if (!img.parentNode) return;
+      img.replaceWith(v);
+      var s = v.closest('.slide');
+      if (s && s.classList.contains('active')) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    }, { once: true });
+    v.src = url;
+  }
+  [].slice.call(document.querySelectorAll('img[data-video]')).forEach(function (img) { upgrade(img, img.getAttribute('data-video')); });
+  [].slice.call(document.querySelectorAll('.need[data-file]')).forEach(function (n) {
+    var f = n.getAttribute('data-file');
+    if (/\.(mp4|webm)$/i.test(f)) {
+      var v = document.createElement('video'); v.src = f; v.autoplay = v.loop = v.muted = true; v.playsInline = true;
+      v.onloadeddata = function () { n.replaceWith(v); }; v.load(); return;
+    }
+    var base = f.replace(/\.[a-z0-9]+$/i, ''), tries = [f].concat(EXT.map(function (e) { return base + '.' + e; })), k = 0;
+    var img = new Image();
+    img.onload = function () { img.alt = n.getAttribute('data-alt') || ''; n.replaceWith(img); if (n.getAttribute('data-video')) upgrade(img, n.getAttribute('data-video')); };
+    img.onerror = function () { if (++k < tries.length) img.src = tries[k]; };
+    img.src = tries[0];
+  });
+})();
+</script>
+<script>
+/* Interactive blocks. All states exist in the HTML; this only changes which one is visible.
+   [data-pick] buttons choose the [data-panel] with the same value. [data-mode] buttons flip the block between today and target. */
+(function () {
+  var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+  $$('.ix').forEach(function (ix) {
+    var rows = $$('[data-pick]', ix), panels = $$('[data-panel]', ix);
+    function pick(id) {
+      rows.forEach(function (r) { r.setAttribute('aria-pressed', String(r.getAttribute('data-pick') === id)); });
+      panels.forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-panel') === id); });
+    }
+    rows.forEach(function (r) { r.addEventListener('click', function () { pick(r.getAttribute('data-pick')); }); });
+    if (rows.length) pick(rows[0].getAttribute('data-pick'));
+    var modes = $$('[data-mode]', ix);
+    modes.forEach(function (b) { b.addEventListener('click', function () {
+      ix.classList.toggle('mode-target', b.getAttribute('data-mode') === 'target');
+      modes.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    }); });
+  });
+
+  /* slider model: replace the formula. Keep it a few lines so a reader can follow it, and label the numbers illustrative. */
+  var A = document.getElementById('sl-a'), B = document.getElementById('sl-b');
+  if (A && B) {
+    var el = function (id) { return document.getElementById(id); };
+    var fmt = function (v) { return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(1); };
+    var bar = function (id, v) { var i = el(id), w = Math.min(50, Math.abs(v) / 40 * 50); i.className = v < 0 ? 'neg' : ''; i.style.width = w + '%'; i.style.left = v < 0 ? (50 - w) + '%' : '50%'; };
+    var calc = function () {
+      var a = +A.value, b = +B.value;
+      if (b > 100 - a) { b = 100 - a; B.value = b; } B.max = 100 - a;
+      var o1 = a * 0.3 - 5, o2 = b * 0.4 - 8;
+      el('va').textContent = a + '%'; el('vb').textContent = b + '%';
+      el('val-1').textContent = fmt(o1); el('val-2').textContent = fmt(o2); bar('bar-1', o1); bar('bar-2', o2);
+      el('read').textContent = o1 < 0 && o2 < 0 ? 'Doing little leaves both outcomes negative.' : 'Both levers together move the outcome up.';
+    };
+    A.addEventListener('input', calc); B.addEventListener('input', calc);
+    $$('[data-preset]').forEach(function (p) { p.addEventListener('click', function () { var v = p.getAttribute('data-preset').split(','); B.max = 100; A.value = v[0]; B.value = v[1]; calc(); }); });
+    calc();
+  }
+})();
+</script>
+</body>
+</html>

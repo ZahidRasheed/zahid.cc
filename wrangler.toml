@@ -3,3 +3,8 @@
 name = "zahid-cc"
 compatibility_date = "2026-07-17"
 pages_build_output_dir = "dist"
+
+# Count-only tracking for the talk pages (see functions/api/hit.js)
+[[kv_namespaces]]
+binding = "COUNTS"
+id = "9807c508af9e4bec8419b4b00309cfad"

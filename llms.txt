@@ -30,6 +30,11 @@ Zahid Rasheed spearheads the AI transformation at Aeven, bridging executive stra
 - [Health Connect Android API](https://www.kodeco.com/35028713-health-connect-android-api) — Kodeco tutorial
 - [Unlocking the Power of Cognitive Diversity With Inclusive Leadership](https://www.kodeco.com/38327270-unlocking-the-power-of-cognitive-diversity-with-inclusive-leadership) — Kodeco article
 
+## Talks
+
+- [You won’t be replaced by AI: slides](https://zahid.cc/talks/nordpak-2026) — NordPak Tech Meetup, 18 Nov 2026
+- [Resources and downloads](https://zahid.cc/talks/nordpak-2026-resources) — second brain, RAG, skills, and a slide builder
+
 ## Links
 
 - Website: https://zahid.cc

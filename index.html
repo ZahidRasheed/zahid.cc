@@ -371,10 +371,15 @@
     color: inherit;
     text-decoration: none;
   }
-  #blog-card .card {
+  #talks-card .pub-link + .pub-link {
+    margin-left: 1.25rem;
+  }
+  #blog-card .card,
+  #talks-card .card {
     padding: 1rem 1.5rem;
   }
-  #blog-card .pub-title {
+  #blog-card .pub-title,
+  #talks-card .pub-title {
     margin: 0 0 0.4rem;
     font-size: 0.85rem;
     line-height: 1.35;
@@ -382,16 +387,19 @@
     color: #424242;
     font-weight: 600;
   }
-  #blog-card .pub-link {
+  #blog-card .pub-link,
+  #talks-card .pub-link {
     font-size: 0.85rem;
     border-bottom: 1px solid #ddd;
   }
-  #blog-card .pub-icon-list {
+  #blog-card .pub-icon-list,
+  #talks-card .pub-icon-list {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  #blog-card .pub-icon-list li {
+  #blog-card .pub-icon-list li,
+  #talks-card .pub-icon-list li {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
@@ -399,20 +407,24 @@
     border-bottom: 1px solid #eeeeee;
     text-align: left;
   }
-  #blog-card .pub-icon-list li:last-child {
+  #blog-card .pub-icon-list li:last-child,
+  #talks-card .pub-icon-list li:last-child {
     border-bottom: none;
     padding-bottom: 0;
   }
-  #blog-card .pub-icon-list .material-icons {
+  #blog-card .pub-icon-list .material-icons,
+  #talks-card .pub-icon-list .material-icons {
     font-size: 1.35rem;
     color: #1976D2;
     flex-shrink: 0;
     margin-top: 0.1rem;
   }
-  #blog-card .pub-icon-list .pub-body {
+  #blog-card .pub-icon-list .pub-body,
+  #talks-card .pub-icon-list .pub-body {
     flex: 1;
   }
-  #blog-card .pub-icon-list .pub-meta {
+  #blog-card .pub-icon-list .pub-meta,
+  #talks-card .pub-icon-list .pub-meta {
     display: block;
     font-size: 0.8rem;
     color: #9e9e9e;
@@ -1031,6 +1043,33 @@
                 <p class="education-card__meta">Pakistan · 2006 – 2010</p>
                 <p class="education-card__focus">The foundation years: how to build things that work, break less often, and still feel a little like magic.</p>
             </article>
+        </div>
+    </div>
+</section>
+
+
+<!--==========================================
+                TALKS
+===========================================-->
+<section id="talks" class="section" aria-labelledby="talks-heading">
+    <div class="container">
+        <div class="section-title">
+            <h4 id="talks-heading" class="text-uppercase text-center"><img src="images/icons/bullhorn.png" alt="" role="presentation">Talks</h4>
+        </div>
+        <div id="talks-card" class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="card">
+                    <ul class="pub-icon-list">
+                        <li>
+                            <i class="material-icons" aria-hidden="true">slideshow</i>
+                            <div class="pub-body">
+                                <span class="pub-meta">NordPak Tech Meetup · 18 Nov 2026</span>
+                                <h3 class="pub-title">You won&rsquo;t be replaced by AI. You&rsquo;ll be replaced by someone who puts it to work.</h3>
+                                <a class="pub-link forward" href="talks/nordpak-2026">Slides</a>                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </section>
